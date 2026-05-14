@@ -1,65 +1,149 @@
+'use client'
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
+import { useLoader } from '@/components/layout/LoaderContext'
+
 
 export default function Home() {
+
+  const { introDone } = useLoader()
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const imageRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+    if (!introDone) return;;
+    if (!imageRef.current) return;
+
+    const ctxt = gsap.context(() => {
+      gsap.to(imageRef.current, {
+        yPercent: 50,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }, containerRef)
+
+    const refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 1800);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      ctxt.revert();
+    };
+  }, [introDone]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="w-full flex flex-col relative bg-black">
+      <section className="hero relative w-full min-h-dvh pt-5">
+
+        <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+          <div ref={imageRef} className="absolute inset-0 scale-110 opacity-40">
+            <Image src="/tech.jpg" alt="" fill priority className="object-cover" />
+          </div>
+        </div>
+
+        <div className="relative z-10 w-full min-h-dvh flex flex-col pb-35">
+
+          <div className="w-full flex">
+
+            <div className=" hidden md:flex flex-1"></div>
+
+            <div className="w-full md:flex-1 flex justify-center items-center">
+              <h1 className="text-4xl md:text-2xl">
+                Shaul Akelo
+              </h1>
+            </div>
+
+            <div className="flex-1 hidden md:flex justify-end ">
+              <button className="px-6 py-3 text-white rounded-full">
+                Get a Quote
+              </button>
+            </div>
+
+          </div>
+
+          <div className="flex-1" />
+          <p className="text-white text-4xl md:text-5xl md:font-medium text-center max-w-xs md:max-w-md mx-auto leading-tighter">
+            Exceptional glazing for those who build with vision.
           </p>
+          
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="relative w-full pb-10 md:pb-40 overflow-x-clip px-8">       
+
+          <div className="grid grid-cols-1 md:grid-cols-3 items-start gap-x-6">
+
+            <div className="hidden md:block row-span-2"/>
+
+            <div className="col-span-1 md:col-start-2 md:col-span-2 h-px bg-white/30 mb-6 ml-0 md:ml-28" />
+
+            <p className="justify-self-start md:justify-self-center text-white text-xs tracking-widest uppercase flex items-center gap-2 mb-6">
+              <span className="text-amber-400">◆</span>
+              Glazing Specialists
+            </p>
+
+            {/* Right — description */}
+            <p className="justify-self-start md:justify-self-end text-white text-sm font-medium max-w-xs leading-relaxed">
+              We design and install bespoke glass systems for ambitious
+              architectural projects. Every pane reflects our commitment
+              to clarity, quality, and collaboration.
+            </p>
+
+          </div>
+            
         </div>
-      </main>
+        
+      </section>
+
+      <section className="about h-[60vh] md:h-[80vh] w-full bg-white flex flex-col md:items-center justify-center gap-10 p-8">
+
+        <p className="text-black text-xs tracking-widest uppercase flex items-center gap-2">
+          <span>◆</span>
+          ABOUT SHAUL AKELO
+        </p>
+
+        <p className="md:text-center text-black text-4xl md:text-5xl font-medium max-w-3xl">
+          We bring architecture to life through
+          craft and innovation. Trusted by
+          architects who demand precision,
+          beauty, and care.
+        </p>
+
+        {/* Convert this to a reusable button component */}
+        <button className='w-fit px-6 py-1 bg-black text-white'>
+          <span className="text-[12px] font-semibold tracking-widest">WHO I AM</span>
+        </button>
+      </section>
+
+      <section className="featured-projects bg-gray-100 w-full min-h-dvh py-10 p-8">
+        <div className="h-px bg-gray-300 mb-6"></div>
+
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-x-12 gap-y-8 items-start">
+
+          <div className="text-black text-xs tracking-widest uppercase flex items-center gap-2">
+            <span>◆</span>
+            FEATURED PROJECTS
+          </div>
+
+          <div className="flex flex-col items-start gap-8">
+            <h2 className="text-black text-4xl md:text-5xl font-medium leading-[1.05] max-w-2xl">
+              Each project tells its own story of collaboration and precision.
+            </h2>
+
+            <button className='w-fit px-6 py-1 bg-black text-white'>
+              <span className="text-[12px] font-semibold tracking-widest">VIEW PROJECTS</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
