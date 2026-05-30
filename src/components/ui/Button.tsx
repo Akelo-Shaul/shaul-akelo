@@ -4,16 +4,16 @@ type Props = {
     label: string
     href?: string
     outline?: boolean
+    textColor?: string
     onClick?: () => void
 }
 
-export default function Button({ label, href, outline, onClick }: Props) {
-    const classes = outline
-        ? "px-6 py-3 text-white rounded-full border border-white/30"
-        : "w-fit px-6 py-1 bg-black text-white"
+export default function Button({ label, href, outline, textColor = "text-white", onClick }: Props) {
+    const classes = `w-fit px-6 py-1  ${textColor} ${outline ? null : 'bg-black'}`
+
 
     const inner = (
-        <span className="text-[12px] font-semibold tracking-widest">{label}</span>
+        <span className="text-[10px] font-semibold uppercase tracking-widest">{label}</span>
     )
 
     if (href) {

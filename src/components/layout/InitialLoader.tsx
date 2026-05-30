@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
-import { SplitText } from 'gsap/SplitText'
+import { gsap, SplitText } from '@/lib/gsap'
 import { useLoader } from './LoaderContext'
 
 export default function InitialLoader() {
@@ -11,7 +10,6 @@ export default function InitialLoader() {
   const textRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    gsap.registerPlugin(SplitText)
     if (!textRef.current) return
 
     const split = new SplitText(textRef.current, {
@@ -55,7 +53,7 @@ export default function InitialLoader() {
       <div className="overflow-hidden">
         <div
           ref={textRef}
-          className="intro-text text-black text-6xl font-semibold leading-none opacity-0"
+          className="intro-text text-black text-5xl font-semibold leading-none opacity-0"
         >
           SHAUL AKELO
         </div>
