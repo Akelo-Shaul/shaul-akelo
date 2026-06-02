@@ -56,7 +56,7 @@ export default function FeatureProjects() {
             <div className="absolute inset-0 overflow-hidden opacity-50">
                 <div
                     key={project.slug}
-                    className="absolute inset-0 opacity-0"
+                    className="absolute inset-0 opacity-100"
                 >
                     {imageSrc ? (
                     <Image

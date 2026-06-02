@@ -21,7 +21,7 @@ export default function SWProjectCard({ project }: {project: Project}) {
                 {/* icon and title section */}
                 <div className="flex flex-col md:flex-row items-start gap-4">
                     {Icon ? (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
+                        <div className="flex h-12 w-12 items-center justify-center text-white">
                             <Icon className="h-6 w-6" />
                         </div>
                     ) : (

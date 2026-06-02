@@ -1,5 +1,5 @@
 'use client'
-import { featureProjects } from "@/data/projects";
+import { featureProjects, projects } from "@/data/projects";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -112,14 +112,20 @@ export default function FeatureProjectsList() {
                     const imageSrc = project.image || project.images?.[0]
                     return (
                         <div 
-                            key={project.slug}
-                            ref={el => {imageRefs.current[i] = el}}
-                            className="absolute inset-0 opacity-0"
-                        >
-                            {imageSrc ? (
-                                <Image src={imageSrc} alt={project.name} fill sizes="260px" className="object-cover" />
-                            ) : null}
-                        </div>
+                        key={project.slug}
+                        ref={el => {imageRefs.current[i] = el}}
+                        className="absolute inset-0 opacity-0"
+                    >
+                        {imageSrc ? (
+                            <Image
+                                src={imageSrc}
+                                alt={project.name}
+                                fill
+                                sizes="260px"
+                                className="object-cover"
+                            />
+                        ) : null}
+                    </div>
                     )
                 })}
             </div>
