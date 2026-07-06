@@ -16,7 +16,7 @@ export default function Hero() {
     const herotitleRef = useRef<HTMLParagraphElement | null>(null)
 
     useEffect(() => {
-    if (!introDone) return;;
+    if (!introDone) return;
     if (!imageRef.current) return;
 
     const ctxt = gsap.context(() => {

@@ -2,13 +2,13 @@
 
 import FeatureProjects from "@/components/projects/FeatureProjects";
 import FilterSection from "@/components/projects/FilterSection";
-import ProjectsList from "@/components/projects/SWProjectsList";
+import ProjectsList from "@/components/projects/sw/SWProjectsList";
 import ProjectsTabbar from "@/components/projects/ProjectsTabbar";
 import { useState } from "react";
 import { animationProjects, uiuxProjects, softwareProjects } from "@/data/projects";
-import SWProjectsList from "@/components/projects/SWProjectsList";
-import UIUXProjectsList from "@/components/projects/UIUXProjectsList";
-import AnimationProjectsList from "@/components/projects/AnimationProjectsList";
+import SWProjectsList from "@/components/projects/sw/SWProjectsList";
+import UIUXProjectsList from "@/components/projects/uiux/UIUXProjectsList";
+import AnimationProjectsList from "@/components/projects/3d&anim/3dfiles/AnimationProjectsList";
 
 type ProjectTab = "software" | "uiux" | "animation"
 

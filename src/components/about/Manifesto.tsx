@@ -1,10 +1,61 @@
+'use client'
+
 import Image from "next/image";
 import Button from "../ui/Button";
 import SectionLabel from "../ui/SectionLabel";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap";
 
 export default function Manifesto() {
+
+    const manifestoRef = useRef<HTMLDivElement | null>(null)
+    const manifestoTextRef = useRef<HTMLParagraphElement | null>(null)
+     
+    useEffect(() => {
+        const ctxt = gsap.context(() => {
+            let manifestoSplit: SplitText | null = null
+            if (manifestoTextRef.current) {
+                manifestoSplit = new SplitText(manifestoTextRef.current, {
+                    type: "lines",
+                    linesClass: "line"
+                })
+
+                // Create clipping wrappers
+                manifestoSplit.lines.forEach((line) => {
+                    const wrapper = document.createElement("div")
+
+                    wrapper.style.overflow = "hidden"
+                    wrapper.style.paddingBottom = "0.2em"
+                    wrapper.style.marginBottom = "0.1em"
+
+                    line.parentNode?.insertBefore(wrapper, line)
+                    wrapper.appendChild(line)
+                })
+
+                gsap.from(manifestoSplit.lines, {
+                    yPercent: 120,
+                    duration: 3,
+                    stagger: 0.08,
+                    ease: "expo.out",
+                    scrollTrigger: {
+                        trigger: manifestoRef.current,
+                        start: "top 80%",
+                    }
+                }) 
+            }
+        }, manifestoRef)
+
+        const refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 1800);
+
+        return () => {
+            clearTimeout(refreshTimer);
+            ctxt.revert();
+        };
+
+    }, [])
+
     return (
-        <section className="flex flex-col gap-15 md:gap-20 p-5 md:p-8">
+        <section ref={manifestoRef} className="flex flex-col gap-15 md:gap-20 p-5 md:p-8">
             <div className="flex flex-col md:flex-row gap-4 text-black items-start justify-between border-t border-gray-300 py-4">
                 <SectionLabel label="MANIFESTO" dark />
                 <p className="text-sm font-medium max-w-xs leading-relaxed">
@@ -15,7 +66,7 @@ export default function Manifesto() {
             </div>
 
             <div className="flex flex-col gap-6">
-                <p className="text-black text-4xl md:text-5xl md:font-medium  max-w-xs md:max-w-3xl leading-tighter">Each phase of our work carries the
+                <p ref={manifestoTextRef} className="text-black text-4xl md:text-5xl md:font-medium  max-w-xs md:max-w-3xl leading-tighter">Each phase of our work carries the
                 same intent; to understand before
                 we create, to refine before we build,
                 and to craft with care that lasts.</p>

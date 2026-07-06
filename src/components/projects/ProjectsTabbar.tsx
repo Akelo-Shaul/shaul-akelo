@@ -6,7 +6,7 @@ interface ProjectsTabbarProps {
 const tabs = [
     { key: 'software', label: 'Software' },
     { key: 'uiux', label: 'UI/UX Design' },
-    { key: 'animation', label: '3d Animation' },
+    { key: 'animation', label: '3d & Animation' },
 ] as const
 
 export default function ProjectsTabbar({ selectedTab, onChangeTab }: ProjectsTabbarProps) {
