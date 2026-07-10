@@ -6,6 +6,8 @@ import { Lenis } from "lenis/react";
 import PageTransition from "@/components/layout/PageTransition";
 import { LoaderProvider } from "@/components/layout/LoaderContext";
 import LenisScrollSync from "@/components/layout/LenisScrollSync";
+import Footer from "@/components/layout/Footer";
+import BottomNav from "@/components/layout/BottomNav";
 
 
 const display = Cormorant_Garamond({
@@ -40,7 +42,9 @@ export default function RootLayout({
             <LenisScrollSync />
             <PageTransition>
               <main>{children}</main>
+              <Footer />
             </PageTransition>
+            <BottomNav />
           </Lenis>
         </LoaderProvider>
       </body>
