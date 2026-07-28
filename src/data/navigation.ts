@@ -6,12 +6,12 @@ export const navLinks = [
 ]
 
 const footerImages: Record<string, string> = {
-    '/':         '/tech.jpg',
-    '/about':    '/poi.png',
-    '/projects': '/Frozen.png',
-    '/contact':  '/tech.jpg', // placeholder — swap later
+    '/':         '/tech.webp',
+    '/about':    '/poi.webp',
+    '/projects': '/Frozen.webp',
+    '/contact':  '/tech.webp', // placeholder — swap later
 }
 
 export function getFooterImage(path: string): string {
-    return footerImages[path] || '/tech.jpg'
+    return footerImages[path] || '/tech.webp'
 }

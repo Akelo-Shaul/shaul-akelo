@@ -6,6 +6,7 @@ import Button from "../../ui/Button";
 
 export default function UIUXProjectCard({ project, index }: { project: Project; index: number }) {
     const reverse = index % 2 === 1
+    const imageSrc = project.image ?? project.images?.[0]
 
     return (
         <div 
@@ -13,9 +14,13 @@ export default function UIUXProjectCard({ project, index }: { project: Project; 
                 ${reverse ? 'md:flex-row-reverse' : ''}
                 `}
         >
-            <div className="w-[60%]">
-                <Image src={project.image ?? '/projects/ashmead.jpg'} alt={project.name} className="w-full h-auto" width={800} height={300} />
-            </div>
+            {/* Rendered only when the project actually has artwork. This used to fall back to
+                /projects/ashmead.jpg, a placeholder that no longer exists. */}
+            {imageSrc && (
+                <div className="w-[60%]">
+                    <Image src={imageSrc} alt={project.name} className="w-full h-auto" width={800} height={300} />
+                </div>
+            )}
             <div className="w-full md:w-[40%] flex flex-col gap-4 max-w-4xl">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-wrap items-center text-sm font-light text-gray-400">

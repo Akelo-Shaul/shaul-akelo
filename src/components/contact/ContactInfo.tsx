@@ -143,7 +143,7 @@ export default function ContactInfo() {
                 {/* Image */}
                 <div className="w-full md:max-w-[500px]">
                     <Image
-                        src="/alexander.png"
+                        src="/alexander.webp"
                         alt="Contact Image"
                         width={700}
                         height={300}

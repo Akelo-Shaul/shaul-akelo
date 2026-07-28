@@ -72,7 +72,7 @@ export default function Hero() {
 
             <div ref={containerRef} className="absolute inset-0 overflow-hidden">
                 <div ref={imageRef} className="absolute inset-0 opacity-40">
-                    <Image src="/bgg.png" alt="" fill priority className="object-cover" />
+                    <Image src="/bgg.webp" alt="" fill priority className="object-cover" />
                 </div>
             </div>
 

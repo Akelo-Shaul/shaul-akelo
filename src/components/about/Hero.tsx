@@ -69,7 +69,7 @@ export default function Hero() {
                 </p>
             </div>
             <div className="relative w-full h-[200px] md:h-[500px] mb-10">
-                <Image src="/about.png" alt="" fill className="object-cover" />
+                <Image src="/about.webp" alt="" fill className="object-cover" />
             </div>
 
         </section>

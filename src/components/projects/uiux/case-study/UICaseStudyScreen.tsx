@@ -52,7 +52,6 @@ export default function UICaseStudyScreen({ project }: { project: Project }) {
               // Hero starts at the top of the page, so 'top top' = scroll 0 (no fade yet),
               // and 'bottom top' = hero fully scrolled past. Using 'top bottom' here made the
               // trigger already active on load, so the fade ran without scrolling.
-              markers: true,
               start: 'bottom 80%',
               end: 'bottom 30%',
               scrub: 1,
