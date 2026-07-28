@@ -70,13 +70,21 @@ export default function ContactInfo() {
                     stagger: 0.08,
                     scrollTrigger: {
                         trigger: imgSectRef.current,
-                        start: "top 80%",   
+                        start: "top 80%",   // fire as the section enters the viewport
                     },
                     ease: "expo.out",
                 })
             }
 
         }, contactInfoRef)
+
+        // Recompute trigger positions once the layout/images have settled.
+        const refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 1800)
+
+        return () => {
+            clearTimeout(refreshTimer)
+            ctxt.revert()
+        }
     }, [introDone])
 
     return (
@@ -93,11 +101,11 @@ export default function ContactInfo() {
                 <div className="flex flex-col md:flex-row flex-1 gap-4">
                     <div className="flex-1">
                         <p>Talk To Us</p>
-                        <p>+254 115 089 122</p>
+                        <a href="tel:+254115089122" className="hover:underline">+254 115 089 122</a>
                     </div>
                     <div className="flex-1">
                         <p>Write Us</p>
-                        <p>shaulakelo@gmail.com</p>
+                        <a href="mailto:shaulakelo@gmail.com" className="hover:underline">shaulakelo@gmail.com</a>
                     </div>
                 </div>
 
@@ -110,32 +118,32 @@ export default function ContactInfo() {
                 <div className="flex flex-col md:flex-row flex-1 gap-4">
                     <div className="flex-1">
                         <p>Talk To Us</p>
-                        <p>+254 115 089 122</p>
+                        <a href="tel:+254115089122" className="hover:underline">+254 115 089 122</a>
                     </div>
                     <div className="flex-1">
-                        <p>Visit Us</p>
-                        <p>BOOK A VISIT</p>
+                        <p>NEED HELP?</p>
+                        <p>BOOK A CONSULTATION</p>
                     </div>
                 </div>
 
             </div>
 
-            <div ref={imgSectRef} className="flex flex-col-reverse md:flex-row text-black items-center justify-center md:p-10 gap-10">
-                <div className="flex flex-col gap-10 md:gap-20 md:w-[900px]">
-                    <h3 ref={imgSectTextRef} className="text-3xl md:text-5xl max-w-xl font-medium text-gray-900 w-full">Share your ideas, and we’ll
-                        shape them into a detailed
-                        proposal that reflects your
-                        goals with precision and
-                        care.</h3>
-                    <div className="flex flex-col gap-3 max-w-none md:max-w-xs md:mr-30">
+            {/* Content-sized blocks centred together, so whitespace sits on the outer
+                edges instead of pooling between the text and image. */}
+            <div ref={imgSectRef} className="flex flex-col md:flex-row items-center justify-center text-black gap-10 md:gap-4 md:p-10">
+                {/* Text */}
+                <div className="flex flex-col gap-10 md:gap-16 w-full md:max-w-2xl">
+                    <h3 ref={imgSectTextRef} className="text-3xl md:text-4xl font-medium text-gray-900">Share your ideas, and we’ll shape them into a detailed proposal that reflects your goals with precision and care.</h3>
+                    <div className="flex flex-col gap-3 max-w-xs md:ml-auto md:mr-20">
                         <SectionLabel label="Have a clear vision in mind?" dark/>
-                        <p className="md:text-sm text-gray-600 mt-2">If you already have a concept or clear idea for your glazing project, you can request a tailored quote right away. Simply fill in the form with as much detail as possible—our team will translate your vision into a precise proposal that fits your needs.</p>
+                        <p className="md:text-sm text-gray-600 mt-2">If you already have a concept or clear idea for your digital project, you can request a tailored quote right away. Simply fill in the form with as much detail as possible—our team will translate your vision into a precise proposal that fits your needs.</p>
                     </div>
                 </div>
 
-                <div className="w-full md:w-[700px] shrink-0">
+                {/* Image */}
+                <div className="w-full md:max-w-[500px]">
                     <Image
-                        src="/cover.png"
+                        src="/alexander.png"
                         alt="Contact Image"
                         width={700}
                         height={300}

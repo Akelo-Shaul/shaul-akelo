@@ -1,11 +1,17 @@
 'use client'
-import { featureProjects, projects } from "@/data/projects";
+import { projects, shuffle } from "@/data/projects";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "@/lib/gsap";
+import useHydrated from "@/hooks/useHydrated";
 
 export default function FeatureProjectsList() {
+
+    // A fresh random order every page load, drawn from all categories. Deferred until after
+    // hydration so the server HTML and first client render agree (see useHydrated).
+    const hydrated = useHydrated()
+    const featured = useMemo(() => (hydrated ? shuffle(projects) : projects), [hydrated])
 
     const sectionRef = useRef<HTMLDivElement | null>(null)
     const previewRef = useRef<HTMLDivElement | null>(null)
@@ -60,7 +66,7 @@ export default function FeatureProjectsList() {
         >
 
             <ul className="border-t border-gray-300">
-                {featureProjects.map((project, i) => {
+                {featured.map((project, i) => {
                     const isActive = activeIndex === i
                     return (
                         <li key={project.slug}>
@@ -108,7 +114,7 @@ export default function FeatureProjectsList() {
                 style={{ willChange: 'transform' }}
                 className="pointer-events-none absolute top-0 left-0 z-20 h-[320px] w-[260px] overflow-hidden"
             >
-                {featureProjects.map((project, i) => {
+                {featured.map((project, i) => {
                     const imageSrc = project.image || project.images?.[0]
                     return (
                         <div 

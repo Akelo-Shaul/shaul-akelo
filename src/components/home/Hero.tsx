@@ -4,7 +4,6 @@ import { useEffect,useRef } from "react"
 import { gsap, ScrollTrigger, SplitText } from "@/lib/gsap"
 import { useLoader } from "../layout/LoaderContext"
 import SectionLabel from "../ui/SectionLabel"
-import Button from "../ui/Button"
 
 export default function Hero() {
 
@@ -72,32 +71,16 @@ export default function Hero() {
         <section ref={heroRef} className="hero relative w-full min-h-dvh">
 
             <div ref={containerRef} className="absolute inset-0 overflow-hidden">
-                <div ref={imageRef} className="absolute inset-0 scale-110 opacity-40">
-                    <Image src="/tech.jpg" alt="" fill priority className="object-cover" />
+                <div ref={imageRef} className="absolute inset-0 opacity-40">
+                    <Image src="/bgg.png" alt="" fill priority className="object-cover" />
                 </div>
             </div>
 
             <div className="relative z-10 w-full h-[100vh] flex flex-col pb-30 ">
 
-                <div className="w-full flex pt-5">
-
-                    <div className=" hidden md:flex flex-1"></div>
-
-                    <div className="w-full md:flex-1 flex justify-center items-center">
-                    <h1 className="text-4xl md:text-2xl">
-                        Shaul Akelo
-                    </h1>
-                    </div>
-
-                    <div className="flex-1 hidden md:flex justify-end ">
-                    <Button label="Get a Quote" href="/about" outline/>
-                    </div>
-
-                </div>
-
                 <div className="flex-1" />
                 <p ref={herotitleRef} className="herotitle text-white text-4xl md:text-5xl md:font-medium text-center max-w-xs md:max-w-2xl mx-auto leading-tighter">
-                    Exceptional glazing for those who build with vision.
+                    Building systems for the world&apos;s best achievers.
                 </p>
                 
             </div>
@@ -116,9 +99,10 @@ export default function Hero() {
 
                     {/* Right — description */}
                     <p className="justify-self-start md:justify-self-end text-white text-sm font-medium max-w-xs leading-relaxed">
-                    We design and install bespoke glass systems for ambitious
-                    architectural projects. Every pane reflects our commitment
-                    to clarity, quality, and collaboration.
+                    We connect you to the world and the world to you through
+                    research, design and engineering of your needs( shaping an
+                    image of your dream). Achieved at low latency, high performance 
+                    and smooth installation.
                     </p>
 
                 </div>

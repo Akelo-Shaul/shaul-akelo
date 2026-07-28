@@ -37,11 +37,11 @@ export default function CaseSections({ section }: Props) {
         <h2 className="text-5xl uppercase text-white">
           {sectionTitles[section.type]}
         </h2>
-        <p className="text-xl text-gray-300 mt-4">{(section as any).body}</p>
+        <p className="text-xl text-gray-300 mt-4">{section.body}</p>
       </div>
-      {section.type === 'designApproach' && (section as any).image && (
+      {section.type === 'designApproach' && section.image && (
         <img
-          src={(section as any).image}
+          src={section.image}
           alt="design approach"
           className="mt-8 w-full h-96 object-cover rounded-lg"
         />

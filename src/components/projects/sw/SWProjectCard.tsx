@@ -1,4 +1,4 @@
-import { Project, SoftwareSubCategory } from "@/data/projects"
+import { Project, SoftwareSubCategory, getProjectLinks } from "@/data/projects"
 import { gsap } from "@/lib/gsap"
 import { useEffect, useRef } from "react"
 import { FiSmartphone, FiGlobe, FiMonitor, FiCpu } from "react-icons/fi"
@@ -19,6 +19,7 @@ export default function SWProjectCard({ project }: {project: Project}) {
     const hoverTl = useRef<gsap.core.Timeline>(null)
 
     const Icon = project.subCategory ? subCategoryIconMap[project.subCategory] : undefined
+    const projectLinks = getProjectLinks(project)
 
     useEffect(() => {
         if (!cardRef.current || !bgRef.current) return
@@ -94,8 +95,10 @@ export default function SWProjectCard({ project }: {project: Project}) {
                  
 
                 {/* buttons section */}
-                <div className="m-3">
-                    <Button label="Source Code"/>
+                <div className="m-3 flex flex-wrap items-center gap-3">
+                    {projectLinks.map((link) => (
+                        <Button key={link.href} label={link.label} href={link.href} external />
+                    ))}
                 </div>
 
             </div>

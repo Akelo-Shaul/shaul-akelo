@@ -19,120 +19,153 @@ export type Project = {
     icon?: 'monitor' | 'globe' | 'fileText' | 'layers'
     subCategory?: SoftwareSubCategory
     sections?: UIUXSection[]   // only used by UI/UX projects
+    website?: string           // live site — shows a "Visit Site" button when set
+    playstore?: string         // Play Store listing — shows an "Open in Play Store" button
+    sourceCode?: string        // public repo — shows a "View Code" button when set
+}
+
+export type ProjectLink = { label: string; href: string }
+
+// Every external link a project card should surface, in display order.
+// A project can have any combination — all three render side by side.
+export function getProjectLinks(project: Project): ProjectLink[] {
+    const links: ProjectLink[] = []
+    if (project.playstore)  links.push({ label: 'Open in Play Store', href: project.playstore })
+    if (project.website)    links.push({ label: 'Visit Site',         href: project.website })
+    if (project.sourceCode) links.push({ label: 'View Code',          href: project.sourceCode })
+    return links
+}
+
+// Single primary link, for surfaces that only have room for one (website preferred, else Play Store).
+export function getProjectLink(project: Project): string | undefined {
+    return project.website || project.playstore
 }
 
 export const softwareProjects: Project[] = [
   {
-    slug: 'ashmead-barn',
-    name: 'Ashmead Barn',
+    slug: 'mazemob',
+    name: 'MazeMob',
     category: 'Software',
     subCategory: 'mobile',
-    description: 'A modular software platform for managing modern construction workflows, with bespoke dashboards and collaborative tools.',
-    tags: ['PROJECT TRACKING', 'CUSTOM WORKFLOWS', 'CLIENT PORTAL'],
+    description: 'A published Android maze game — procedurally generated levels, touch-first controls, and a lightweight ad-supported build shipped end to end on Google Play.',
+    tags: ['ANDROID', 'GAME DEVELOPMENT', 'GOOGLE PLAY'],
     icon: 'monitor',
-    image: '/projects/ashmead.jpg',
+    image: 'https://res.cloudinary.com/ddtzd3o9n/image/upload/v1785231263/maze_ksuh5g.png',
+    playstore: 'https://play.google.com/store/apps/details?id=com.shaulakelo.mazemob',
   },
-  {
-    slug: 'sea-breeze',
-    name: 'Sea Breeze',
-    category: 'Software',
-    subCategory: 'web',
-    description: 'A responsive web app for dynamic lighting and environment control across residential and commercial properties.',
-    tags: ['REAL-TIME ANALYTICS', 'SMART UI', 'API INTEGRATION'],
-    icon: 'globe',
-    image: '/projects/seabreeze.jpg',
-  },
-  {
-    slug: 'rusty-house',
-    name: 'Rusty House',
-    category: 'Software',
-    subCategory: 'desktop',
-    description: 'An engineering dashboard that visualizes custom glazing performance data and automates maintenance workflows.',
-    tags: ['DATA VISUALIZATION', 'AUTOMATION', 'SAFETY METRICS'],
-    icon: 'fileText',
-    image: '/projects/rusty.jpg',
-  },
-  {
-    slug: 'kensington',
-    name: 'Kensington',
-    category: 'Software',
-    subCategory: 'iot',
-    description: 'A high-end client experience platform for specification, approvals, and custom fabrication tracking.',
-    tags: ['CLIENT ONBOARDING', 'DOCUMENT MANAGEMENT', 'REAL-TIME UPDATES'],
-    icon: 'layers',
-    image: '/projects/kensington.jpg',
-  },
+  // Placeholder projects — kept for reference, uncomment to restore.
+  // {
+  //   slug: 'ashmead-barn',
+  //   name: 'Ashmead Barn',
+  //   category: 'Software',
+  //   subCategory: 'mobile',
+  //   description: 'A modular software platform for managing modern construction workflows, with bespoke dashboards and collaborative tools.',
+  //   tags: ['PROJECT TRACKING', 'CUSTOM WORKFLOWS', 'CLIENT PORTAL'],
+  //   icon: 'monitor',
+  //   image: '/projects/ashmead.jpg',
+  // },
+  // {
+  //   slug: 'sea-breeze',
+  //   name: 'Sea Breeze',
+  //   category: 'Software',
+  //   subCategory: 'web',
+  //   description: 'A responsive web app for dynamic lighting and environment control across residential and commercial properties.',
+  //   tags: ['REAL-TIME ANALYTICS', 'SMART UI', 'API INTEGRATION'],
+  //   icon: 'globe',
+  //   image: '/projects/seabreeze.jpg',
+  // },
+  // {
+  //   slug: 'rusty-house',
+  //   name: 'Rusty House',
+  //   category: 'Software',
+  //   subCategory: 'desktop',
+  //   description: 'An engineering dashboard that visualizes custom glazing performance data and automates maintenance workflows.',
+  //   tags: ['DATA VISUALIZATION', 'AUTOMATION', 'SAFETY METRICS'],
+  //   icon: 'fileText',
+  //   image: '/projects/rusty.jpg',
+  // },
+  // {
+  //   slug: 'kensington',
+  //   name: 'Kensington',
+  //   category: 'Software',
+  //   subCategory: 'iot',
+  //   description: 'A high-end client experience platform for specification, approvals, and custom fabrication tracking.',
+  //   tags: ['CLIENT ONBOARDING', 'DOCUMENT MANAGEMENT', 'REAL-TIME UPDATES'],
+  //   icon: 'layers',
+  //   image: '/projects/kensington.jpg',
+  // },
 ]
 
 export const uiuxProjects: Project[] = [
   {
-    slug: 'flux-ux-suite',
-    name: 'Flux UX Suite',
+    slug: 'pizza-app',
+    name: 'Pizza App',
     category: 'UI/UX',
-    description: 'A design system focused on tactile interactions, elegant screen layouts, and user journeys for design-led product experiences.',
-    tags: ['INTERACTION DESIGN', 'PROTOTYPING', 'USER TESTING'],
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=80',
-    images: [
-      'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1200&q=80',
-    ],
+    description: 'A mouth-watering mobile ordering experience that turns pizza customization into a fast, playful, and frictionless journey from craving to checkout.',
+    tags: ['MOBILE ORDERING', 'UI DESIGN', 'PROTOTYPING'],
+    image: 'https://res.cloudinary.com/ddtzd3o9n/image/upload/v1785075688/pizza_oazrkp.png',
     sections: [
-      { type: 'problem',  body: 'Design teams working across multiple projects faced inconsistent component libraries, fragmented design patterns, and repetitive development cycles. This lack of standardization led to longer implementation times, UI/UX misalignment, and difficulty maintaining visual coherence across products.' },
-      { type: 'solution', body: 'We developed Flux UX Suite, a comprehensive design system combining reusable components, unified design tokens, and interactive guidelines. The system provides a single source of truth for design and development, reducing friction and accelerating product delivery while maintaining brand consistency.' },
-      { type: 'designApproach', body: 'Our approach focused on creating a living documentation system with real interactive components. We mapped user workflows, conducted extensive user testing, and iterated based on feedback. The system emphasizes tactile interactions and elegant screen layouts that feel natural to users while maintaining technical scalability.', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=80' },
-      { type: 'screen', name: 'Dashboard', description: 'A centralized hub displaying component inventory, design tokens, usage guidelines, and real-time analytics. Team members can instantly search for components, view implementation examples, and track adoption metrics across projects.', image: 'https://images.unsplash.com/photo-1507925921917-a3b63939dcb9?auto=format&fit=crop&w=1200&q=80' },
-      { type: 'screen', name: 'Component Library', description: 'An interactive explorer of all available components with live code examples, prop documentation, and accessibility details. Designers and developers can filter by category, preview states, and copy implementation snippets directly.', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1200&q=80' },
-      { type: 'result',   body: 'Component adoption reached 85% across product teams within three months. Design-to-development handoff time decreased by 60%, and design consistency scores improved significantly. The system became the foundation for scaling design practices across the organization, with ongoing contributions from all teams.' },
-    ]
-  },
-  {
-    slug: 'aero-interface',
-    name: 'Aero Interface',
-    category: 'UI/UX',
-    description: 'A polished digital interface concept for immersive product discovery and seamless navigation across complex content ecosystems.',
-    tags: ['VISUAL HIERARCHY', 'MOTION UI', 'ACCESSIBILITY'],
-    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80',
-    images: [
-      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=1200&q=80',
-    ],
-    sections: [
-      { type: 'problem',  body: 'E-commerce platforms struggled with complex navigation patterns causing high bounce rates and reduced conversion. Users faced cognitive overload from poorly organized content hierarchies and inconsistent interaction patterns, leading to abandoned shopping carts and frustrated experiences.' },
-      { type: 'solution', body: 'Aero Interface reimagines digital product discovery through a polished, layered interface emphasizing visual hierarchy and intuitive navigation. By combining elegant motion design with accessible interaction patterns, we created an experience that guides users naturally through complex content ecosystems.' },
-      { type: 'designApproach', body: 'We employed motion as a wayfinding tool, using subtle animations to clarify relationships between elements. Extensive accessibility testing ensured the experience remains inclusive. We conducted user research with diverse audiences to validate interaction patterns and refined based on eye-tracking studies.', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=80' },
-      { type: 'screen', name: 'Product Discovery', description: 'An immersive exploration interface featuring dynamic filtering, smart recommendations, and smooth transitions between product categories. Users can refine searches intuitively while maintaining context about their current position in the catalog.', image: 'https://images.unsplash.com/photo-1542744095-fcf47b53fe63?auto=format&fit=crop&w=1200&q=80' },
-      { type: 'screen', name: 'Checkout Flow', description: 'A streamlined multi-step checkout process with progressive disclosure, real-time validation, and contextual help. The interface reduces cognitive load through clear visual indicators and reassuring micro-interactions at each step.', image: 'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1200&q=80' },
-      { type: 'result',   body: 'The redesigned interface increased average session duration by 45% and improved conversion rates by 32%. User satisfaction scores improved dramatically, and bounce rates on product pages decreased significantly. The motion design patterns became a benchmark for the industry.' },
+      { type: 'problem',  body: 'Ordering pizza online often meant navigating cluttered menus, confusing customization options, and lengthy checkout forms. Customers abandoned orders midway due to unclear pricing, slow flows, and a lack of visual feedback about what they were actually building.' },
+      { type: 'solution', body: 'Slice Order Flow reimagines mobile pizza ordering around speed and delight. A visual builder lets users assemble their pie tap-by-tap with live pricing, while a streamlined single-screen checkout removes friction. Playful micro-interactions keep the experience appetizing from first tap to confirmation.' },
+      { type: 'designApproach', body: 'We mapped the full craving-to-checkout journey, prototyping each interaction to minimize taps and cognitive load. Real-time visual feedback shows the pizza taking shape as choices are made, and progressive disclosure keeps advanced options out of the way until needed. Usability testing with hungry users guided every refinement.', image: 'https://res.cloudinary.com/ddtzd3o9n/image/upload/v1785077265/pizzaonboarding_jc0a12.png' },
+      { type: 'screen', name: 'Pizza Builder', description: 'An interactive, visual customization screen where users add crusts, sauces, and toppings with instant preview and live price updates. Smart defaults and popular combos help first-time users decide quickly.', image: 'https://res.cloudinary.com/ddtzd3o9n/image/upload/v1785077266/pizzaui_lcni4c.png' },
+      { type: 'screen', name: 'Express Checkout', description: 'A single-screen checkout with saved addresses, one-tap payment, and clear delivery-time estimates. Reassuring confirmation states and order tracking keep customers informed after they hit order.', image: 'https://res.cloudinary.com/ddtzd3o9n/image/upload/v1785077265/pizzashop_tpqbia.png' },
+      { type: 'result',   body: 'The streamlined flow cut average time-to-order in half and reduced cart abandonment significantly. Customers praised the playful, visual builder, and repeat-order rates climbed as the experience became something people actually enjoyed using.' },
     ]
   },
 ]
 
+// The interactive Room scene. It's rendered directly by AnimationProjectsList as <RoomScene />
+// rather than as a card, so it lives outside `animationProjects` — otherwise it would show up
+// twice, once as the live canvas and once as a static card beside it.
+export const roomProject: Project = {
+  slug: 'room',
+  name: 'Room',
+  category: '3D Animation',
+  description: 'An explorable real-time interior built in Blender and rendered in the browser with React Three Fiber. Drag to orbit, scroll to zoom.',
+  tags: ['BLENDER', 'REACT THREE FIBER', 'REAL-TIME 3D'],
+  image: 'https://res.cloudinary.com/ddtzd3o9n/image/upload/v1785258073/roompic_imlivb.png',
+}
+
+// Only the Room scene ships for now, and it isn't listed here (see `roomProject` above), so this
+// array holds just the supporting cards beside it. Placeholders kept for reference.
 export const animationProjects: Project[] = [
-  {
-    slug: 'liquid-motion',
-    name: 'Liquid Motion',
-    category: '3D Animation',
-    description: 'A cinematic 3D animation piece with fluid motion and architectural storytelling for brand reveal sequences.',
-    tags: ['3D RENDER', 'CINEMATIC LIGHTING', 'MOTION GRAPHICS'],
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    slug: 'horizon-render',
-    name: 'Horizon Render',
-    category: '3D Animation',
-    description: 'A stylized animation study exploring volumetric lighting, reflective surfaces, and spatial camera moves.',
-    tags: ['VOLUMETRICS', '3D ENVIRONMENT', 'CAMERA ANIMATION'],
-    image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
-  },
+  // {
+  //   slug: 'liquid-motion',
+  //   name: 'Liquid Motion',
+  //   category: '3D Animation',
+  //   description: 'A cinematic 3D animation piece with fluid motion and architectural storytelling for brand reveal sequences.',
+  //   tags: ['3D RENDER', 'CINEMATIC LIGHTING', 'MOTION GRAPHICS'],
+  //   image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+  // },
+  // {
+  //   slug: 'horizon-render',
+  //   name: 'Horizon Render',
+  //   category: '3D Animation',
+  //   description: 'A stylized animation study exploring volumetric lighting, reflective surfaces, and spatial camera moves.',
+  //   tags: ['VOLUMETRICS', '3D ENVIRONMENT', 'CAMERA ANIMATION'],
+  //   image: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+  // },
 ]
 
+// Every live project, across all categories. This is the pool the home page list and the
+// projects-page header draw their featured picks from.
 export const projects: Project[] = [
   ...softwareProjects,
   ...uiuxProjects,
   ...animationProjects,
+  roomProject,
 ]
+
+// Fisher–Yates. Returns a new array so the source stays untouched.
+export function shuffle<T>(items: readonly T[]): T[] {
+  const out = [...items]
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[out[i], out[j]] = [out[j], out[i]]
+  }
+  return out
+}
 
 export const featureProjects: Project[] = [
   {

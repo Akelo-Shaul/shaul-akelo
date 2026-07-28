@@ -7,8 +7,8 @@ export const navLinks = [
 
 const footerImages: Record<string, string> = {
     '/':         '/tech.jpg',
-    '/about':    '/cover.png',
-    '/projects': '/projects/seabreeze.jpg',
+    '/about':    '/poi.png',
+    '/projects': '/Frozen.png',
     '/contact':  '/tech.jpg', // placeholder — swap later
 }
 

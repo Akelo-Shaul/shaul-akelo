@@ -59,17 +59,17 @@ export default function Hero() {
     }, [introDone])
 
     return (
-        <section ref={heroRef} className="flex flex-col about h-[80vh] md:h-[130vh] w-full gap-10 bg-white justify-end items-center p-5 md:p-8">
-            <div className="flex flex-col  gap-5 items-center">
+        <section ref={heroRef} className="flex flex-col about h-[80vh] md:h-[150vh] w-full gap-10 bg-white justify-end items-center p-5 md:p-8">
+            <div className="flex flex-col  gap-5 items-center md:pt-30">
                 <SectionLabel label="ABOUT SHAUL AKELO" dark />
 
                 <p ref={heroTextRef} className="text-center text-black text-4xl md:text-5xl font-medium max-w-xl">
                 Passionately shaping code
-                into timeless design
+                into community and returns
                 </p>
             </div>
             <div className="relative w-full h-[200px] md:h-[500px] mb-10">
-                <Image src="/tech.jpg" alt="" fill className="object-cover" />
+                <Image src="/about.png" alt="" fill className="object-cover" />
             </div>
 
         </section>

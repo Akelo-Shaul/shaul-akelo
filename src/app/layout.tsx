@@ -8,6 +8,7 @@ import { LoaderProvider } from "@/components/layout/LoaderContext";
 import LenisScrollSync from "@/components/layout/LenisScrollSync";
 import Footer from "@/components/layout/Footer";
 import BottomNav from "@/components/layout/BottomNav";
+import Header from "@/components/layout/Header";
 
 
 const display = Cormorant_Garamond({
@@ -23,6 +24,11 @@ const body = DM_Sans({
 export const metadata: Metadata = {
   title: "Shaul Portfolio",
   description: "I make website and 3d environments and animations. For brand or product awareness.",
+  // Declared here rather than as app/icon.gif — Next's icon file convention only accepts
+  // .ico/.jpg/.jpeg/.png/.svg, so the GIF is served straight out of /public instead.
+  icons: {
+    icon: [{ url: "/shaul.gif", type: "image/gif" }],
+  },
 };
 
 export default function RootLayout({
@@ -41,9 +47,13 @@ export default function RootLayout({
           <Lenis root>
             <LenisScrollSync />
             <PageTransition>
+              <Header />
               <main>{children}</main>
-              <Footer />
             </PageTransition>
+            {/* Footer in flow after the page. It sticks to the viewport bottom (z-0) so the
+                page content (z-10) scrolls up and reveals it, without bleeding into the
+                page transition (it's below the fold during a transition). */}
+            <Footer />
             <BottomNav />
           </Lenis>
         </LoaderProvider>

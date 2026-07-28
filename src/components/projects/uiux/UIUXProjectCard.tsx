@@ -14,7 +14,7 @@ export default function UIUXProjectCard({ project, index }: { project: Project; 
                 `}
         >
             <div className="w-[60%]">
-                <Image src="/projects/ashmead.jpg" alt={project.name} className="w-full h-auto" width={800} height={300} />
+                <Image src={project.image ?? '/projects/ashmead.jpg'} alt={project.name} className="w-full h-auto" width={800} height={300} />
             </div>
             <div className="w-full md:w-[40%] flex flex-col gap-4 max-w-4xl">
                 <div className="flex flex-col gap-4">

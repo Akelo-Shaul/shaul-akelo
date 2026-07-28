@@ -1,42 +1,74 @@
 'use client'
 
-import { Project } from "@/data/projects"
+import { Project, getProjectLink } from "@/data/projects"
 import CaseSections from "./sections/CaseSections"
 import { useEffect, useRef } from "react"
 import { gsap, ScrollTrigger } from "@/lib/gsap"
 import Image from "next/image"
+import Button from "@/components/ui/Button"
+import { useLoader } from "@/components/layout/LoaderContext"
 
 export default function UICaseStudyScreen({ project }: { project: Project }) {
   const backgroundRef = useRef<HTMLDivElement | null>(null)
   const heroRef = useRef<HTMLDivElement | null>(null)
+  const { transitioning } = useLoader()
+  // True once we've actually seen a transition run. This distinguishes the settled
+  // `transitioning === false` (safe to measure) from the stale `false` that's present
+  // at mount during a client-side navigation, before PageTransition flips it to true.
+  const transitionSeen = useRef(false)
 
   const backgroundImage = project.image ||
     'https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1200&q=80'
 
+  const projectLink = getProjectLink(project)
+
   useEffect(() => {
+    // While a transition is running, mark it seen and do nothing. The page is inside
+    // PageTransition's position:fixed + transformed overlay right now, so any ScrollTrigger
+    // built here would measure the hero at the wrong position and the scrubbed fade would
+    // sit at its end state — which is the "animation plays on its own" bug on navigation.
+    if (transitioning) {
+      transitionSeen.current = true
+      return
+    }
+    // Ignore the stale `false` that exists at mount before the transition has started.
+    if (!transitionSeen.current) return
     if (!backgroundRef.current || !heroRef.current) return
 
-    const ctx = gsap.context(() => {
-      gsap.to(backgroundRef.current, {
-        opacity: 0.05,                
-        ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top bottom',
-          end: 'top 30%',
-          markers: true,
-          scrub: 1,
-        },
+    let ctx: ReturnType<typeof gsap.context> | undefined
+    let frame2 = 0
+
+    // Two frames so the browser has applied position:relative and laid the hero out
+    // before ScrollTrigger measures it. Measuring against the settled layout keeps the
+    // scrubbed fade at scroll 0 (full opacity) until the user actually scrolls.
+    const frame1 = requestAnimationFrame(() => {
+      frame2 = requestAnimationFrame(() => {
+        ctx = gsap.context(() => {
+          gsap.to(backgroundRef.current, {
+            opacity: 0.1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: heroRef.current,
+              // Hero starts at the top of the page, so 'top top' = scroll 0 (no fade yet),
+              // and 'bottom top' = hero fully scrolled past. Using 'top bottom' here made the
+              // trigger already active on load, so the fade ran without scrolling.
+              markers: true,
+              start: 'bottom 80%',
+              end: 'bottom 30%',
+              scrub: 1,
+            },
+          })
+        })
+        ScrollTrigger.refresh()
       })
     })
 
-    const refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 2000)
-
     return () => {
-      clearTimeout(refreshTimer)
-      ctx.revert()
+      cancelAnimationFrame(frame1)
+      cancelAnimationFrame(frame2)
+      ctx?.revert()
     }
-  }, [])
+  }, [transitioning])
 
   return (
     <div className="relative w-full bg-black">
@@ -48,7 +80,7 @@ export default function UICaseStudyScreen({ project }: { project: Project }) {
         <div
           ref={backgroundRef}
           className="absolute inset-0 w-full h-full"
-          style={{ opacity: 0.5, willChange: 'opacity' }}
+          style={{ opacity: 0.4, willChange: 'opacity' }}
         >
           <Image
             src={backgroundImage}
@@ -79,6 +111,12 @@ export default function UICaseStudyScreen({ project }: { project: Project }) {
           <p className="text-xl text-gray-100 tracking-wider font-thin max-w-2xl">
             {project.description}
           </p>
+
+          {projectLink && (
+            <div>
+              <Button label="See Project" href={projectLink} external />
+            </div>
+          )}
         </section>
 
         {/* Content sections */}

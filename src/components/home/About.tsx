@@ -57,10 +57,10 @@ export default function About() {
             <SectionLabel label="ABOUT SHAUL AKELO" dark />
 
             <p ref={aboutTextRef} className="md:text-center text-black text-3xl md:text-5xl font-medium max-w-3xl">
-            We bring architecture to life through
-            craft and innovation. Trusted by
-            architects who demand precision,
-            beauty, and care.
+            We bring data to life through
+            skill and innovation. Trusted by
+            organizations who demand precision,
+            delivery and care.
             </p>
 
             <Button label="WHO I AM" href="/about" />
