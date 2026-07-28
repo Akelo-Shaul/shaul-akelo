@@ -9,6 +9,7 @@ import LenisScrollSync from "@/components/layout/LenisScrollSync";
 import Footer from "@/components/layout/Footer";
 import BottomNav from "@/components/layout/BottomNav";
 import Header from "@/components/layout/Header";
+import AnimatedFavicon from "@/components/layout/AnimatedFavicon";
 
 
 const display = Cormorant_Garamond({
@@ -26,6 +27,9 @@ export const metadata: Metadata = {
   description: "I make website and 3d environments and animations. For brand or product awareness.",
   // Declared here rather than as app/icon.gif — Next's icon file convention only accepts
   // .ico/.jpg/.jpeg/.png/.svg, so the GIF is served straight out of /public instead.
+  // Keep this pointing at the ORIGINAL /shaul.gif: it is the only version confirmed to actually
+  // animate in the tab. A cropped/rescaled re-encode (via sharp) reported 2 frames but did not
+  // play, and swapping frames from JS did not repaint the icon either. Size < animation here.
   icons: {
     icon: [{ url: "/shaul.gif", type: "image/gif" }],
   },
@@ -42,6 +46,7 @@ export default function RootLayout({
       className={`${display.variable} ${body.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <AnimatedFavicon />
         <LoaderProvider>
           <InitialLoader />
           <Lenis root>

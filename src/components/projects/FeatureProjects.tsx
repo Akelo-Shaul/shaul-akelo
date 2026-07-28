@@ -1,13 +1,14 @@
 'use client'
 import { projects, shuffle } from "@/data/projects";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from '@/lib/gsap'
 import useHydrated from "@/hooks/useHydrated";
 
 export default function FeatureProjects() {
 
     const [currentIndex, setCurrentIndex] = useState(0)
+    const progressRef = useRef<HTMLDivElement>(null)
 
     // A fresh random order every page load, drawn from all categories. Held off until after
     // hydration so the server HTML and first client render agree (see useHydrated).
@@ -35,11 +36,16 @@ export default function FeatureProjects() {
         return () => window.clearInterval(timer)
     }, [currentIndex, total]) // `total` changes when the shuffled pool lands after hydration
 
+    // Animate scaleX, not width. `width` is a layout property, so tweening it forced a reflow on
+    // every frame for the full 3s, on a permanent loop; scaleX is compositor-only. Targeting the
+    // ref instead of the '.progress-fill' selector also drops a DOM query per cycle.
     useEffect(() => {
-        const target = '.progress-fill'
-        gsap.set(target, { width: '0%' })
-        const anim = gsap.to(target, {
-            width: '100%',
+        const el = progressRef.current
+        if (!el) return
+
+        gsap.set(el, { scaleX: 0 })
+        const anim = gsap.to(el, {
+            scaleX: 1,
             duration: 3,
             ease: 'power1.inOut'
         })
@@ -116,8 +122,11 @@ export default function FeatureProjects() {
                 </div>
 
                 <div className="mt-8 w-full h-1 bg-gray/300">
-                    <div 
-                        className="progress-fill h-full bg-white origin-left" 
+                    {/* w-full because scaleX scales a full-width bar down to 0, rather than
+                        growing a zero-width one. origin-left keeps it anchored on the left. */}
+                    <div
+                        ref={progressRef}
+                        className="progress-fill h-full w-full bg-white origin-left"
                         />
                         
                 </div>

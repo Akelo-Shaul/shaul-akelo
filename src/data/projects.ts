@@ -167,29 +167,32 @@ export function shuffle<T>(items: readonly T[]): T[] {
   return out
 }
 
-export const featureProjects: Project[] = [
-  {
-    slug: 'sea-breeze',
-    name: 'Sea Breeze',
-    category: 'Residential',
-    description: 'Coastal home featuring structural glazing systems designed to maximize ocean views while providing exceptional durability.',
-    tags: ['FLUID X VERTICAL (STRUCTURAL GLAZING)', 'FLUID X SLIDING DOOR', 'FLUID WINDOW'],
-    image: '/projects/seabreeze.jpg',
-  },
-  {
-    slug: 'ashmead-barn',
-    name: 'Ashmead Barn',
-    category: 'Residential',
-    description: 'A stunning residential conversion featuring bespoke fluid glass systems, combining modern aesthetics with period architecture.',
-    tags: ['FLUID SLIDING DOOR', 'FLUID GLASS BALUSTRADE', 'FLUID X PIVOT DOOR', 'FLUID WINDOW'],
-    image: '/projects/ashmead.jpg',
-  },
-  {
-    slug: 'kensington',
-    name: 'Kensington',
-    category: 'Commercial',
-    description: 'Premium commercial development featuring high-performance glass box systems for a striking architectural presence.',
-    tags: ['FLUID X SLIDING DOOR', 'FLUID GLASS BOX'],
-    image: '/projects/kensington.jpg',
-  },
-]
+// Superseded — the home list and the projects-page header now draw random picks from `projects`
+// instead. Nothing imports this. Note the image paths below point at files that have since been
+// deleted from public/projects/, so restore artwork before re-enabling any of it.
+// export const featureProjects: Project[] = [
+//   {
+//     slug: 'sea-breeze',
+//     name: 'Sea Breeze',
+//     category: 'Residential',
+//     description: 'Coastal home featuring structural glazing systems designed to maximize ocean views while providing exceptional durability.',
+//     tags: ['FLUID X VERTICAL (STRUCTURAL GLAZING)', 'FLUID X SLIDING DOOR', 'FLUID WINDOW'],
+//     image: '/projects/seabreeze.jpg',
+//   },
+//   {
+//     slug: 'ashmead-barn',
+//     name: 'Ashmead Barn',
+//     category: 'Residential',
+//     description: 'A stunning residential conversion featuring bespoke fluid glass systems, combining modern aesthetics with period architecture.',
+//     tags: ['FLUID SLIDING DOOR', 'FLUID GLASS BALUSTRADE', 'FLUID X PIVOT DOOR', 'FLUID WINDOW'],
+//     image: '/projects/ashmead.jpg',
+//   },
+//   {
+//     slug: 'kensington',
+//     name: 'Kensington',
+//     category: 'Commercial',
+//     description: 'Premium commercial development featuring high-performance glass box systems for a striking architectural presence.',
+//     tags: ['FLUID X SLIDING DOOR', 'FLUID GLASS BOX'],
+//     image: '/projects/kensington.jpg',
+//   },
+// ]
