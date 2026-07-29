@@ -35,6 +35,11 @@ yarn-error.log*
 # ...but the template carries no secrets and documents the required vars.
 !.env.example
 
+# The raw 230MB Blender export. Exceeds GitHub's 100MB hard limit and nothing loads
+# it — Room.tsx uses room-optimized.glb (28MB), which IS tracked. Keep the source
+# locally, just never commit it.
+public/models/room.glb
+
 # vercel
 .vercel
 
