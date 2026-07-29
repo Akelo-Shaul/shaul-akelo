@@ -30,7 +30,7 @@ export type ProjectLink = { label: string; href: string }
 // A project can have any combination — all three render side by side.
 export function getProjectLinks(project: Project): ProjectLink[] {
     const links: ProjectLink[] = []
-    if (project.playstore)  links.push({ label: 'Open in Play Store', href: project.playstore })
+    if (project.playstore)  links.push({ label: 'Play Store',         href: project.playstore })
     if (project.website)    links.push({ label: 'Visit Site',         href: project.website })
     if (project.sourceCode) links.push({ label: 'View Code',          href: project.sourceCode })
     return links

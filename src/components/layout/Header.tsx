@@ -4,12 +4,14 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useLoader } from "./LoaderContext"
 import Button from "../ui/Button"
+import { useQuote } from "../quote/QuoteContext"
 
 // Routes whose top section has a light background — the header needs dark text there.
 const lightRoutes = ["/about", "/contact"]
 
 export default function Header() {
   const { introDone } = useLoader()
+  const { openQuote } = useQuote()
   const pathname = usePathname()
   const onLight = lightRoutes.includes(pathname)
 
@@ -32,9 +34,11 @@ export default function Header() {
       </div>
 
       <div className="hidden flex-1 justify-end md:flex">
+        {/* Opens the quote drawer rather than navigating — no href, so Button renders a
+            <button> and the onClick fires. */}
         <Button
           label="Get a Quote"
-          href="/contact"
+          onClick={openQuote}
           outline
           textColor={onLight ? "text-black" : "text-white"}
         />

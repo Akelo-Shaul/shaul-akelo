@@ -10,6 +10,9 @@ import Footer from "@/components/layout/Footer";
 import BottomNav from "@/components/layout/BottomNav";
 import Header from "@/components/layout/Header";
 import AnimatedFavicon from "@/components/layout/AnimatedFavicon";
+import { QuoteProvider } from "@/components/quote/QuoteContext";
+import QuoteShift from "@/components/quote/QuoteShift";
+import QuoteDrawer from "@/components/quote/QuoteDrawer";
 
 
 const display = Cormorant_Garamond({
@@ -48,19 +51,27 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <AnimatedFavicon />
         <LoaderProvider>
-          <InitialLoader />
-          <Lenis root>
-            <LenisScrollSync />
-            <PageTransition>
-              <Header />
-              <main>{children}</main>
-            </PageTransition>
-            {/* Footer in flow after the page. It sticks to the viewport bottom (z-0) so the
-                page content (z-10) scrolls up and reveals it, without bleeding into the
-                page transition (it's below the fold during a transition). */}
-            <Footer />
-            <BottomNav />
-          </Lenis>
+          <QuoteProvider>
+            <InitialLoader />
+            <Lenis root>
+              {/* QuoteShift slides everything inside it left when the quote drawer opens. */}
+              <QuoteShift>
+                <LenisScrollSync />
+                <PageTransition>
+                  <Header />
+                  <main>{children}</main>
+                </PageTransition>
+                {/* Footer in flow after the page. It sticks to the viewport bottom (z-0) so the
+                    page content (z-10) scrolls up and reveals it, without bleeding into the
+                    page transition (it's below the fold during a transition). */}
+                <Footer />
+                <BottomNav />
+              </QuoteShift>
+            </Lenis>
+            {/* Outside QuoteShift on purpose: the drawer is position:fixed and must anchor to
+                the viewport, not to the transformed (shifted) wrapper. */}
+            <QuoteDrawer />
+          </QuoteProvider>
         </LoaderProvider>
       </body>
     </html>

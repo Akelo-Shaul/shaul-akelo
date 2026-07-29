@@ -3,12 +3,14 @@
 import Image from "next/image";
 import SectionLabel from "../ui/SectionLabel";
 import { useLoader } from "../layout/LoaderContext";
+import { useQuote } from "../quote/QuoteContext";
 import { useEffect, useRef } from "react";
 import { gsap, SplitText, ScrollTrigger } from "@/lib/gsap";
 
 export default function ContactInfo() {
 
     const { introDone } = useLoader()
+    const { openQuote } = useQuote()
 
     const contactInfoRef = useRef<HTMLDivElement | null>(null)
     const contactInfoTextRef = useRef<HTMLParagraphElement | null>(null)
@@ -121,8 +123,16 @@ export default function ContactInfo() {
                         <a href="tel:+254115089122" className="hover:underline">+254 115 089 122</a>
                     </div>
                     <div className="flex-1">
-                        <p>NEED HELP?</p>
-                        <p>BOOK A CONSULTATION</p>
+                        <p>Need Help?</p>
+                        {/* Opens the quote drawer. Styled to match the phone link above it
+                            rather than as a filled button, so the two columns stay balanced. */}
+                        <button
+                            type="button"
+                            onClick={openQuote}
+                            className="text-left hover:underline"
+                        >
+                            GET A QUOTE
+                        </button>
                     </div>
                 </div>
 

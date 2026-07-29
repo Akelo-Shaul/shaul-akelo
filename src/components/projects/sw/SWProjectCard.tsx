@@ -89,13 +89,22 @@ export default function SWProjectCard({ project }: {project: Project}) {
                             </h3>
                             <p className="max-w-3xl text-lg">{project.description}</p>
                         </div>
-                        <p className="text-sm">{project.description}</p>
+                        {/* Tags, not a repeat of the description. Same slash-separated idiom
+                            as UIUXProjectCard. */}
+                        <div className="flex flex-wrap items-center text-sm font-light text-gray-300">
+                            {project.tags.map((tag, i) => (
+                                <span key={tag} className="inline-flex items-center">
+                                    {tag}
+                                    {i < project.tags.length - 1 && <span className="mx-2">/</span>}
+                                </span>
+                            ))}
+                        </div>
                     </div>
                 </div>
                  
 
                 {/* buttons section */}
-                <div className="m-3 flex flex-wrap items-center gap-3">
+                <div className="m-3 mt-6 flex flex-wrap items-center gap-3 md:mt-3">
                     {projectLinks.map((link) => (
                         <Button key={link.href} label={link.label} href={link.href} external />
                     ))}

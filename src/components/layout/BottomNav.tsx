@@ -8,6 +8,7 @@ import { useLoader } from "./LoaderContext"
 import { navLinks } from "@/data/navigation"
 import SectionLabel from "../ui/SectionLabel"
 import Button from "../ui/Button"
+import { useQuote } from "../quote/QuoteContext"
 
 // Smooth, expressive easing (expo-out feel) so nothing snaps.
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -37,6 +38,7 @@ export default function BottomNav() {
   const pathname = usePathname()
   const lenis = useLenis()
   const { introDone } = useLoader()
+  const { openQuote } = useQuote()
 
   const [open, setOpen] = useState(false)
   const [atBottom, setAtBottom] = useState(false)
@@ -259,7 +261,11 @@ export default function BottomNav() {
                   {/* Full-width CTA — shares the Button component so it gets the same
                       arrow-to-robot hover morph as every other button on the site. */}
                   <motion.div variants={fadeUp} className="mt-6">
-                    <Button label="Get a Quote" href="/contact" onClick={closeMenu} fullWidth />
+                    <Button
+                      label="Get a Quote"
+                      onClick={() => { closeMenu(); openQuote() }}
+                      fullWidth
+                    />
                   </motion.div>
                 </motion.div>
               </div>
