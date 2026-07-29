@@ -35,12 +35,15 @@ export default function FAQItem({ faq, isOpen, onToggle }: FAQItemProps) {
 
     return (
         <div className="border-b border-gray-300">
-            <button 
-            className="w-full flex items-center max-w-xs md:max-w-none justify-between py-6"
+            {/* No max-width: `max-w-xs` on mobile capped the row at 20rem, so justify-between
+                spread the question and icon inside that narrow box instead of across the full
+                width, leaving the icon stranded mid-row. */}
+            <button
+            className="w-full flex items-center justify-between gap-6 py-6"
             onClick={onToggle}
             >
                 <span className="font-bold text-start text-sm">{faq.question}</span>
-                <FiPlus className={`transition-transform ${isOpen ? "rotate-45" : ""}`}/>
+                <FiPlus className={`shrink-0 transition-transform ${isOpen ? "rotate-45" : ""}`}/>
             </button>
             <div className="overflow-hidden h-0" ref={contentRef}>
                 <p className=" pb-3">
