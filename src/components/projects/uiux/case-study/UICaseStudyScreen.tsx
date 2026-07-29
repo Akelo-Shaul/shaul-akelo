@@ -5,6 +5,7 @@ import CaseSections from "./sections/CaseSections"
 import { useEffect, useRef } from "react"
 import { gsap, ScrollTrigger } from "@/lib/gsap"
 import Image from "next/image"
+import Link from "next/link"
 import Button from "@/components/ui/Button"
 import { useLoader } from "@/components/layout/LoaderContext"
 
@@ -100,10 +101,28 @@ export default function UICaseStudyScreen({ project }: { project: Project }) {
           ref={heroRef}
           className="w-full h-screen flex flex-col justify-center gap-10 px-8 md:px-26"
         >
-          <div className="flex flex-row gap-6">
-            <h4>HOME</h4>
-            <h4 className="uppercase">{project.name}</h4>
-          </div>
+          {/* Breadcrumb: HOME navigates, the current page is bold + underlined and carries
+              aria-current so it's announced as the current location too. */}
+          <nav aria-label="Breadcrumb">
+            <ol className="flex flex-row items-center gap-6">
+              <li>
+                <Link
+                  href="/"
+                  className="font-light text-white/70 transition-colors hover:text-white"
+                >
+                  HOME
+                </Link>
+              </li>
+              <li>
+                <span
+                  aria-current="page"
+                  className="font-bold uppercase text-white underline underline-offset-4"
+                >
+                  {project.name}
+                </span>
+              </li>
+            </ol>
+          </nav>
           <h1 className="text-9xl font-bold uppercase text-white">
             {project.name}
           </h1>
