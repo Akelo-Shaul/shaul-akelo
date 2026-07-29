@@ -59,8 +59,8 @@ export default function Hero() {
     }, [introDone])
 
     return (
-        <section ref={heroRef} className="flex flex-col about h-[80vh] md:h-[150vh] w-full gap-10 bg-white justify-end items-center p-5 md:p-8">
-            <div className="flex flex-col  gap-5 items-center md:pt-30">
+        <section ref={heroRef} className="flex flex-col about w-full gap-10 bg-white items-center p-5 pt-28 md:p-8 md:pt-44">
+            <div className="flex flex-col  gap-5 items-center">
                 <SectionLabel label="ABOUT SHAUL AKELO" dark />
 
                 <p ref={heroTextRef} className="text-center text-black text-4xl md:text-5xl font-medium max-w-xl">
