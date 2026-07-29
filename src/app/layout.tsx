@@ -26,7 +26,12 @@ const body = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Shaul Portfolio",
+  // `default` is the tab title for any page that doesn't set its own; `template` wraps ones
+  // that do, so a future `title: 'About'` renders as "About — Shaul Akelo".
+  title: {
+    default: "Shaul Akelo",
+    template: "%s — Shaul Akelo",
+  },
   description: "I make website and 3d environments and animations. For brand or product awareness.",
   // Declared here rather than as app/icon.gif — Next's icon file convention only accepts
   // .ico/.jpg/.jpeg/.png/.svg, so the GIF is served straight out of /public instead.
