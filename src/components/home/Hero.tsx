@@ -72,7 +72,10 @@ export default function Hero() {
 
             <div ref={containerRef} className="absolute inset-0 overflow-hidden">
                 <div ref={imageRef} className="absolute inset-0 opacity-40">
-                    <Image src="/bgg.webp" alt="" fill priority className="object-cover" />
+                    {/* Decorative backdrop rendered at 40% opacity behind the hero text, so it
+                        doesn't need full detail — q=50 roughly halves the payload of what is the
+                        page's LCP element. */}
+                    <Image src="/bgg.webp" alt="" fill priority quality={50} className="object-cover" />
                 </div>
             </div>
 

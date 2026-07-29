@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react"
 import { useLoader } from "./LoaderContext"
 import { navLinks } from "@/data/navigation"
 import SectionLabel from "../ui/SectionLabel"
+import Button from "../ui/Button"
 
 // Smooth, expressive easing (expo-out feel) so nothing snaps.
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -246,7 +247,7 @@ export default function BottomNav() {
                   {/* Secondary links + contact */}
                   <motion.div variants={fadeUp} className="mt-6 flex gap-8 text-xs text-white/55">
                     <div className="flex flex-col gap-1">
-                      <Link href="#" className="transition-colors hover:text-white">News</Link>
+                      <Link href="https://medium.com/@shaulakelo" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">News</Link>
                       <Link href="https://github.com/Akelo-Shaul" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">GitHub</Link>
                     </div>
                     <div className="flex flex-col gap-1">
@@ -255,15 +256,10 @@ export default function BottomNav() {
                     </div>
                   </motion.div>
 
-                  {/* Full-width CTA */}
+                  {/* Full-width CTA — shares the Button component so it gets the same
+                      arrow-to-robot hover morph as every other button on the site. */}
                   <motion.div variants={fadeUp} className="mt-6">
-                    <Link
-                      href="/contact"
-                      onClick={closeMenu}
-                      className="flex w-full items-center justify-center gap-3 bg-black py-3 text-[10px] font-semibold uppercase tracking-widest text-white transition-colors hover:bg-neutral-950"
-                    >
-                      <span aria-hidden="true">↳</span> Get a Quote
-                    </Link>
+                    <Button label="Get a Quote" href="/contact" onClick={closeMenu} fullWidth />
                   </motion.div>
                 </motion.div>
               </div>

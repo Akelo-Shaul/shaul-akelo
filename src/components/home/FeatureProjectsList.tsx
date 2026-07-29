@@ -1,5 +1,5 @@
 'use client'
-import { projects, shuffle } from "@/data/projects";
+import { getProjectHref, projects, shuffle } from "@/data/projects";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
@@ -68,10 +68,14 @@ export default function FeatureProjectsList() {
             <ul className="border-t border-gray-300">
                 {featured.map((project, i) => {
                     const isActive = activeIndex === i
+                    // Case study if the project has one, else the live project in a new tab.
+                    const { href, external } = getProjectHref(project)
                     return (
                         <li key={project.slug}>
                             <Link
-                                href={`/projects/${project.slug}`}
+                                href={href}
+                                target={external ? '_blank' : undefined}
+                                rel={external ? 'noopener noreferrer' : undefined}
                                 onMouseEnter={() => handleRowEnter(i)}
                                 className="grid grid-cols-[1fr_auto] md:grid-cols-[2fr_3fr_auto] items-center gap-6 py-5 border-b border-gray-300 hover:border-gray-500"
                             >

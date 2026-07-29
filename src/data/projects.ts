@@ -157,6 +157,24 @@ export const projects: Project[] = [
   roomProject,
 ]
 
+/**
+ * Where a project row/card should navigate to, in order of preference:
+ *   1. its case-study page, if one exists — only UI/UX projects get `/case/[slug]` routes
+ *      (see `generateStaticParams` in src/app/case/[slug]/page.tsx)
+ *   2. otherwise the live project itself — Play Store, site, or repo — in a new tab
+ *   3. otherwise the projects index, so the link is never dead
+ */
+export function getProjectHref(project: Project): { href: string; external: boolean } {
+    if (uiuxProjects.some((p) => p.slug === project.slug)) {
+        return { href: `/case/${project.slug}`, external: false }
+    }
+
+    const live = project.website ?? project.playstore ?? project.sourceCode
+    if (live) return { href: live, external: true }
+
+    return { href: '/projects', external: false }
+}
+
 // Fisher–Yates. Returns a new array so the source stays untouched.
 export function shuffle<T>(items: readonly T[]): T[] {
   const out = [...items]

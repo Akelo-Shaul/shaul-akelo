@@ -57,8 +57,8 @@ export default function CTA() {
             <SectionLabel label="WHERE VISION MEETS EXECUTION" dark />
             <p ref={ctaTextRef} className="text-black text-4xl md:text-5xl md:font-medium  max-w-xs md:max-w-xl leading-tighter">Every great build begins with understanding</p>
             <div className="flex gap-8 items-start">
-                <Button label="MY APPROACH" href="" outline textColor="text-black" />
-                <Button label="GET IN TOUCH" href="" />
+                <Button label="MY APPROACH" href="/about" outline textColor="text-black" />
+                <Button label="GET IN TOUCH" href="/contact" />
             </div>
         </div>
     )

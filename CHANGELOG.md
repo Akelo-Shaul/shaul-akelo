@@ -3,6 +3,61 @@
 All notable changes to this project are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased] — 2026-07-29
+
+Gave every button a hover animation, and connected the last of the dead links.
+
+### Added
+
+- **Arrow → robot hover morph on every button**
+  (`src/components/ui/Button.tsx`, `src/components/ui/morphPaths.ts`).
+  An `↳` arrow sits before each label and morphs into the site's robot mascot —
+  the same character as the favicon — using GSAP's **MorphSVGPlugin** (free since
+  GSAP 3.13; already bundled in the installed 3.15.0, like `SplitText`).
+  Implemented inside `Button` so all call sites inherit it, including the
+  variable-length `.map()` in `SWProjectCard`. See
+  `docs/layout-and-navigation.md` → *Buttons* for the mechanics and constraints.
+  - Both paths share one `viewBox="0 0 1000 1000"`; the arrow is a **filled**
+    outline (not stroked) and `fillRule="evenodd"` is required or the robot's
+    eyes and mouth fill solid.
+  - The plugin is **lazy-loaded on first hover** via a memoised `loadMorphSVG()`
+    in `src/lib/gsap.ts`, not registered globally — it's ~20 KB and `Button`
+    renders on every route.
+  - Honours `prefers-reduced-motion`; `morph={false}` opts out per call site.
+
+- **`Button` gained `fullWidth` and `morph` props**, and now forwards `onClick`
+  when `href` is set — previously it was silently dropped on the link branch.
+
+### Changed
+
+- **The bottom-nav "Get a Quote" CTA now uses `Button`** (`BottomNav.tsx`). It
+  was a bespoke `<Link>` with a literal `↳` text glyph, which is why it looked
+  and behaved differently from every other button. Its `closeMenu` handler is
+  what required the `onClick`-with-`href` fix above.
+
+### Fixed
+
+- **Dead links across the site.**
+  - `CTA.tsx` — "MY APPROACH" and "GET IN TOUCH" had `href=""`. An empty string
+    is falsy, so `Button` rendered them as inert `<button>` elements with no
+    handler. Now `/about` and `/contact`.
+  - `BottomNav.tsx` — the "News" link was `href="#"`; now
+    `https://medium.com/@shaulakelo`, opening in a new tab.
+  - `home/FeatureProjectsList.tsx` — every project row pointed at
+    `/projects/[slug]`, a route that does not exist, so all of them 404'd. New
+    `getProjectHref()` in `src/data/projects.ts` resolves, in order: the case
+    study if one exists (membership in `uiuxProjects`, the same source
+    `generateStaticParams` uses, so it can't drift from the generated routes);
+    otherwise the live project (`website ?? playstore ?? sourceCode`) in a new
+    tab; otherwise `/projects`, so a row is never dead. Verified against the
+    prerendered HTML — MazeMob → Play Store (new tab), Pizza App →
+    `/case/pizza-app`, Room → `/projects`.
+
+- **Hover morph got stuck as a robot.** The first implementation played a paused
+  timeline on enter and `reverse()`d it on leave; the reverse never restored the
+  original `d`, so the icon never returned to an arrow. Replaced with two
+  explicit tweens plus `overwrite: 'auto'` for rapid in/out hovers.
+
 ## [Unreleased] — 2026-07-28
 
 Shipped the first real project (MazeMob on Google Play), replaced the remaining
@@ -57,9 +112,15 @@ added CI.
   `contact/ContactInfo`, `home/Hero` and `data/navigation.ts`.
 
 - **`next.config.ts` image settings**
-  - `qualities: [75, 90]` — Next 16 requires an explicit allowlist (default
-    `[75]`); 90 is used by the full-bleed project banner.
+  - `qualities: [50, 75, 90]` — Next 16 requires an explicit allowlist (default
+    `[75]`); 90 is used by the full-bleed project banner, 50 by the hero backdrop.
   - `formats: ['image/avif', 'image/webp']` — default is WebP only.
+
+- **Hero backdrop served at `quality={50}`** (`home/Hero.tsx`) — it renders at
+  40% opacity behind the hero text, so full detail was wasted on what is also the
+  page's LCP element. Measured against the production server with an AVIF Accept
+  header: **37,538 → 13,610 bytes (64% smaller)**, matching Lighthouse's 23.6 KiB
+  estimated saving almost exactly. Verified visually at 40% opacity — no banding.
 
 - **Project banner no longer renders soft.** `projects/FeatureProjects.tsx` had
   `sizes="260px"` on a `fill` image spanning the full viewport — the width of
@@ -138,9 +199,14 @@ added CI.
   (`sessionStorage`); both were deliberately deferred as design decisions.
   Note the loader's trailing 1600 ms is *not* dead time — it is the backdrop the
   page slides across (`PageTransition` z-10 over loader z-9).
-- **Performance has still only been measured against the dev server.** TBT
-  ~2,250 ms and Speed Index ~4.1 s are inflated by unminified bundles and
-  react-refresh. Re-measure with `npm run build && npm run start`.
+- **Earlier performance reports were all measured against the dev server** and
+  should be disregarded. Confirmed against a production build: JS on `/` is
+  **281 KB gzipped** (921 KB raw, 12 chunks). The "Minify JavaScript — 282 KiB"
+  and much of the "Reduce unused JavaScript — 401 KiB" audits were dev artefacts;
+  production is minified, and the single largest offender (`next-devtools`,
+  212.9 KiB) does not ship at all. `three.js` (959 KB) is code-split via
+  `next/dynamic({ ssr: false })` and never loads on the home page.
+  Full Lighthouse metrics against production have not been captured yet.
 - **13 ESLint warnings remain** (non-blocking) — mostly `<img>` vs `next/image`
   and unused imports. `CaseSections.tsx` still uses raw `<img>`, bypassing the
   optimizer.

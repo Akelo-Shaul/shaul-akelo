@@ -81,7 +81,9 @@ A single component that renders both the compact bar and the menu overlay.
   small box (`transformOrigin: bottom center`) anchored just above the toggle.
 - Content is held hidden until the box has expanded (`delayChildren`), then
   staggers in: MENU label, nav links (masked line reveal), secondary block
-  (News / GitHub + phone / email), and a full-width "Get a Quote" CTA.
+  (News / GitHub + phone / email), and a full-width "Get a Quote" CTA — which is
+  the shared `Button` with `fullWidth`, so it carries the same hover morph as
+  every other button (see [Buttons](#buttons--srccomponentsuibuttontsx)).
 - Nav links: hovering one **dims the others** (`group-hover/nav:text-white/40`
   with `hover:!text-white`); the active route gets an amber `◆`.
 
@@ -99,11 +101,55 @@ A single component that renders both the compact bar and the menu overlay.
 - Closes on ✕, backdrop, `Escape`, and route change (`closeMenu()` resets the
   open-mode flags).
 
-### Contact placeholders
+### Contact links
 
-Phone (`+1 000 000 0000`), the News / GitHub links (`#`), and socials/legal in the
-footer are placeholders — replace with real URLs. The email is
-`shaulakelo@gmail.com`.
+Real: **News** → `https://medium.com/@shaulakelo`, **GitHub** →
+`https://github.com/Akelo-Shaul`, phone `+254 115 089 122`, email
+`shaulakelo@gmail.com`. Both external links open in a new tab
+(`target="_blank" rel="noopener noreferrer"`).
+
+Still placeholders: the footer's **X** social and both **legal** links
+(`Privacy policy`, `Terms & conditions`) are `href=""` — replace with real URLs.
+
+---
+
+## Buttons — `src/components/ui/Button.tsx`
+
+Every button on the site routes through this one component, so changes here are
+global. Props: `label`, `href`, `onClick`, `outline`, `textColor`, `external`,
+`fullWidth`, `morph`.
+
+- `href` renders a `next/link`, otherwise a `<button>`. **`onClick` works with
+  `href`** — the bottom-nav CTA needs it to close the menu.
+- `fullWidth` switches `w-fit px-6 py-1` → a centered block (`flex w-full … py-3`)
+  for the bottom-nav CTA.
+
+### Arrow → robot hover morph
+
+An `↳` arrow sits **before** the label and morphs into the site's robot mascot
+(the same character as the favicon) on hover, via GSAP's **MorphSVGPlugin**.
+
+- **Paths** live in `src/components/ui/morphPaths.ts`. Both are authored in the
+  same `viewBox="0 0 1000 1000"` — mismatched coordinate spaces make the shape
+  fly across the canvas mid-tween.
+- The arrow is a **filled** outline, not a stroked line: it morphs into a filled
+  shape, and a stroked path would render the robot as a hairline.
+- `fillRule="evenodd"` is **required** — the robot's eyes and mouth are holes cut
+  from its body outline; without it the shape fills solid.
+- `fill="currentColor"` makes the icon follow `textColor`, so it works on the
+  dark-filled and outline variants and on light routes with no extra props.
+- **Two explicit tweens**, not a paused timeline played/reversed: reversing a
+  completed MorphSVG timeline did **not** restore the original `d`, leaving the
+  icon stuck as a robot. `overwrite: 'auto'` handles rapid in/out hovers.
+- Skipped entirely when `prefers-reduced-motion` is set (`useReducedMotion`).
+- Pass `morph={false}` to opt out — worth considering where several buttons sit
+  in a row, e.g. `SWProjectCard`.
+
+**Plugin loading.** MorphSVG is *not* registered alongside `ScrollTrigger` /
+`SplitText` in `src/lib/gsap.ts`. It is ~20 KB and `Button` renders on every
+route, so `loadMorphSVG()` memoises a dynamic `import()` at module scope: the
+first hover anywhere loads and registers it once, and every button reuses that
+promise. Note the plugin ships free with GSAP 3.13+ — no Club licence needed.
 
 ---
 
@@ -179,3 +225,8 @@ should return the outgoing page, not the body.
 | `src/components/layout/Footer.tsx` | Reveal-on-scroll footer, per-page image |
 | `src/components/layout/PageTransition.tsx` | Route transition + FrozenRouter |
 | `src/components/layout/LoaderContext.tsx` | `introDone` + `transitioning` state |
+| `src/components/ui/Button.tsx` | Shared button + arrow→robot hover morph |
+| `src/components/ui/morphPaths.ts` | The two SVG paths the morph tweens between |
+| `src/lib/gsap.ts` | GSAP singleton; eager plugins + lazy `loadMorphSVG()` |
+| `src/hooks/useReducedMotion.ts` | `prefers-reduced-motion`, gates the morph |
+| `src/hooks/useHydrated.ts` | Post-hydration flag for client-only randomness |
