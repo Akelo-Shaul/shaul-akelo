@@ -13,7 +13,7 @@ export default function ContactInfo() {
     const { openQuote } = useQuote()
 
     const contactInfoRef = useRef<HTMLDivElement | null>(null)
-    const contactInfoTextRef = useRef<HTMLParagraphElement | null>(null)
+    const contactInfoTextRef = useRef<HTMLHeadingElement | null>(null)
     const imgSectRef = useRef<HTMLDivElement | null>(null)
     const imgSectTextRef = useRef<HTMLHeadingElement | null>(null)
 
@@ -93,7 +93,8 @@ export default function ContactInfo() {
         <section ref={contactInfoRef} className="bg-white mb-15 pt-30 md:py-40 p-5 md:p-8">
             <div className="flex flex-col gap-8 my-10">
                 <SectionLabel label="CONTACT" dark/>
-                <p ref={contactInfoTextRef} className="text-black text-4xl md:text-5xl md:font-medium  max-w-xs md:max-w-xl leading-tighter">Every great build begins with understanding</p>
+                {/* h1, not p — see the note in home/Hero.tsx. */}
+                <h1 ref={contactInfoTextRef} className="text-black text-4xl md:text-5xl md:font-medium  max-w-xs md:max-w-xl leading-tighter">Every great build begins with understanding</h1>
             </div>
 
             <div className="md:my-20 flex  flex-col md:flex-row text-black border-t border-gray-300 pt-4 gap-8">
@@ -154,7 +155,7 @@ export default function ContactInfo() {
                 <div className="w-full md:max-w-[500px]">
                     <Image
                         src="/alexander.webp"
-                        alt="Contact Image"
+                        alt="A marble statue of a classical commander making a call to Shaul Akelo"
                         width={700}
                         height={300}
                         className="w-full h-auto"

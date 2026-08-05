@@ -84,9 +84,13 @@ const personSchema = {
     "Three.js",
     "Next.js",
   ],
+  // Kept in sync with the social links in Footer.tsx — a profile linked in the footer but missing
+  // here is a wasted entity signal.
   sameAs: [
     "https://github.com/Akelo-Shaul",
-    "https://www.linkedin.com/in/shaul-akelo",
+    "https://www.linkedin.com/in/shaul-akelo/",
+    "https://www.instagram.com/official_shaul_/",
+    "https://www.youtube.com/@shaulakelo",
   ],
 };
 

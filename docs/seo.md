@@ -186,6 +186,46 @@ When counting JSON-LD blocks in built HTML, match the full opening tag
 alone double-counts, because the string also appears inside the serialised RSC
 payload embedded in the page.
 
+## On-page semantics
+
+Audited against Google's
+[SEO starter guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide).
+
+**Every page has exactly one `<h1>`.** The page headlines were `<p>` elements,
+so `/`, `/about`, `/projects`, and `/contact` had no `h1` at all — on `/about`
+and `/contact` the only heading on the page was the CTA text, which is not what
+those pages are about.
+
+Changing the tag is **purely semantic here**: Tailwind v4's preflight resets
+headings to `font-size: inherit; font-weight: inherit` and zeroes margins, so
+the existing utility classes still drive the entire appearance. Verified in the
+built CSS (`h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}`). The GSAP
+animations bind through refs, not tag selectors, so they were unaffected — the
+ref types changed from `HTMLParagraphElement` to `HTMLHeadingElement`.
+
+`/projects` is the exception: its visible header is a rotating featured-project
+carousel with no fixed headline, so it carries an `sr-only` h1 describing what
+the page contains. That is an accessibility affordance, not hidden keyword text.
+
+**No `keywords` meta tag.** It was briefly added to case studies and then
+removed — the guide states plainly that "Google Search doesn't use the keywords
+meta tag."
+
+**Alt text** describes each image's content rather than its slot on the page —
+two images previously read `alt="Contact Image"`. The case-study backdrop is
+decorative (a 40%-opacity image behind the text) and correctly carries `alt=""`
+so screen readers skip it.
+
+**Anchor text** is descriptive throughout — project cards link on the project's
+name, and no link reads "click here" or "read more".
+
+### Known gaps
+
+- The footer's **X link, Privacy policy, and Terms & conditions point at `#`**.
+  Dead placeholders — either give them real destinations or remove them.
+- `sameAs` in the `Person` schema must stay in step with the footer's social
+  links. Both currently list GitHub, LinkedIn, Instagram, and YouTube.
+
 ## What this does not do
 
 Technical SEO makes the site **eligible** to rank; it does not rank it. The
@@ -204,10 +244,13 @@ remaining work is off-page and editorial:
   | `/case/mazemob` | 62 |
   | `/case/room` | 60 |
 
-  Under roughly 300 words there is little for Google to match a query against.
-  Adding `sections` to `mazemob` and `room` is the single highest-value change
-  available, and no amount of metadata substitutes for it. Text baked into
-  images is invisible to Google.
+  Note that Google's own starter guide says there is **"no magical word count
+  target, minimum or maximum"** — so treat the column above as a proxy, not a
+  target. What matters is that a 60-word page states a project's name and one
+  sentence about it, and therefore has almost nothing for a search query to
+  match. Adding `sections` to `mazemob` and `room` is the single
+  highest-value change available, and no amount of metadata substitutes for it.
+  Text baked into images is invisible to Google.
 
 - **Backlinks.** Get the domain onto the GitHub profile, LinkedIn, and any
   directory listing. These also reinforce the `sameAs` entity signal above.

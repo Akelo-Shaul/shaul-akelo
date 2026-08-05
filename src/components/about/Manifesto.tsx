@@ -114,7 +114,7 @@ export default function Manifesto() {
 
                 {/* Image */}
                 <div className="w-full md:max-w-[500px]">
-                    <Image src="/abtt.webp" alt="Contact Image" width={700} height={300} className="w-full h-auto" />
+                    <Image src="/abtt.webp" alt="A dimly lit desk at night: a tablet showing a dashboard interface, keyboard, headphones, and a city skyline through the window" width={700} height={300} className="w-full h-auto" />
                 </div>
             </div>
         </section>

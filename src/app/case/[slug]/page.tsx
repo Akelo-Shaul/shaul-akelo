@@ -29,7 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title,
     description: project.description,
-    keywords: project.tags,
+    // No `keywords` here on purpose: Google Search ignores the keywords meta tag outright
+    // (https://developers.google.com/search/docs/fundamentals/seo-starter-guide). The tags are
+    // still rendered as visible text on the card and case page, which is what actually counts.
     alternates: {
       canonical: `/case/${project.slug}`,
     },

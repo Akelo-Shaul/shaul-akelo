@@ -12,7 +12,7 @@ export default function Hero() {
     const heroRef = useRef<HTMLDivElement | null>(null)
     const containerRef = useRef<HTMLDivElement | null>(null);
     const imageRef = useRef<HTMLDivElement | null>(null);
-    const herotitleRef = useRef<HTMLParagraphElement | null>(null)
+    const herotitleRef = useRef<HTMLHeadingElement | null>(null)
 
     useEffect(() => {
     if (!introDone) return;
@@ -82,9 +82,12 @@ export default function Hero() {
             <div className="relative z-10 w-full h-[100vh] flex flex-col pb-30 ">
 
                 <div className="flex-1" />
-                <p ref={herotitleRef} className="herotitle text-white text-4xl md:text-5xl md:font-medium text-center max-w-xs md:max-w-2xl mx-auto leading-tighter">
+                {/* h1, not p: this is the page's actual headline, and every page should mark its
+                    topic up as a heading. Tailwind's preflight resets heading font-size/weight to
+                    inherit, so the tag change is purely semantic — the classes still drive the look. */}
+                <h1 ref={herotitleRef} className="herotitle text-white text-4xl md:text-5xl md:font-medium text-center max-w-xs md:max-w-2xl mx-auto leading-tighter">
                     Building systems for the world&apos;s best achievers.
-                </p>
+                </h1>
                 
             </div>
 

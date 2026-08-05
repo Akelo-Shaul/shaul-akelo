@@ -84,7 +84,9 @@ export default function UICaseStudyScreen({ project }: { project: Project }) {
         >
           <Image
             src={backgroundImage}
-            alt="case study background"
+            // Decorative: a 40%-opacity backdrop behind the case study, carrying no information
+            // the surrounding text doesn't already state. Empty alt so screen readers skip it.
+            alt=""
             fill
             className="object-cover object-center"
             priority

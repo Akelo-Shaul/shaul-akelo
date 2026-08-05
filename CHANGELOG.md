@@ -64,6 +64,23 @@ shared by the whole site. See `docs/seo.md` for the full architecture.
 
 ### Changed
 
+- **Page headlines are now `<h1>` instead of `<p>`** (`home/Hero.tsx`,
+  `about/Hero.tsx`, `contact/ContactInfo.tsx`). `/`, `/about`, `/projects`, and
+  `/contact` previously had no `h1` at all — on `/about` and `/contact` the only
+  heading on the page was the CTA text. Purely semantic: Tailwind v4's preflight
+  resets headings to `font-size: inherit; font-weight: inherit`, so the utility
+  classes still drive the whole appearance, and the GSAP animations bind through
+  refs rather than tag selectors. `/projects` gets an `sr-only` h1 instead, since
+  its header is a rotating carousel with no fixed headline.
+
+- **Descriptive alt text.** Two images read `alt="Contact Image"` regardless of
+  content. The case-study backdrop is decorative and now carries `alt=""` so
+  screen readers skip it rather than announcing "case study background".
+
+- **`sameAs` now lists Instagram and YouTube** alongside GitHub and LinkedIn,
+  matching the footer's social links. A profile linked in the footer but absent
+  from the schema is a wasted entity signal.
+
 - **Project cards now link to the case page rather than straight out to the
   Play Store / live site** (`getProjectHref`). Without an inbound internal link
   a case page is orphaned, and a sitemap entry alone is a weak discovery signal.
@@ -74,6 +91,12 @@ shared by the whole site. See `docs/seo.md` for the full architecture.
   site-wide title also became `Shaul Akelo — Web, 3D & Animation Developer`,
   and `description` now reads as prose rather than the placeholder
   "I make website and 3d environments and animations."
+
+### Removed
+
+- **The `keywords` meta tag on case studies**, added earlier in this same batch.
+  Google's SEO starter guide states plainly that "Google Search doesn't use the
+  keywords meta tag" — it was dead weight in the `<head>`.
 
 ### Fixed
 

@@ -31,6 +31,11 @@ export default function Projects() {
 
     return (
         <div className="w-full flex flex-col relative bg-gray-700">
+            {/* This page's visible header is a rotating featured-project carousel, so there is no
+                fixed headline to mark up. A screen-reader-only h1 gives the page a stable topic for
+                assistive tech and for search engines, without altering the design. It states what
+                the page actually contains — not hidden keyword text. */}
+            <h1 className="sr-only">Projects — software, UI/UX design, and 3D animation work by Shaul Akelo</h1>
             <FeatureProjects />
             <ProjectsTabbar selectedTab={selectedTab} onChangeTab={setSelectedTab} />
             <FilterSection />

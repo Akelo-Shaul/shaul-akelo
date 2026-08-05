@@ -12,7 +12,7 @@ export default function Hero() {
     const { introDone } = useLoader()
 
     const heroRef = useRef<HTMLDivElement | null>(null)
-    const heroTextRef = useRef<HTMLParagraphElement | null>(null)
+    const heroTextRef = useRef<HTMLHeadingElement | null>(null)
 
     useEffect(() => {
         if (!introDone) return;
@@ -63,10 +63,12 @@ export default function Hero() {
             <div className="flex flex-col  gap-5 items-center">
                 <SectionLabel label="ABOUT SHAUL AKELO" dark />
 
-                <p ref={heroTextRef} className="text-center text-black text-4xl md:text-5xl font-medium max-w-xl">
+                {/* h1, not p — see the note in home/Hero.tsx. Tailwind preflight makes the tag
+                    change purely semantic. */}
+                <h1 ref={heroTextRef} className="text-center text-black text-4xl md:text-5xl font-medium max-w-xl">
                 Passionately shaping code
                 into community and returns
-                </p>
+                </h1>
             </div>
             <div className="relative w-full h-[200px] md:h-[500px] mb-10">
                 <Image src="/about.webp" alt="" fill className="object-cover" />
