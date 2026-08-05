@@ -3,6 +3,73 @@
 All notable changes to this project are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased] — 2026-08-05
+
+Built out the SEO surface, which was previously a single title and description
+shared by the whole site. See `docs/seo.md` for the full architecture.
+
+### Added
+
+- **`src/lib/site.ts`** — single source of truth for the canonical origin
+  (`SITE_URL`), site name, and default description. Every absolute URL in
+  canonicals, Open Graph tags, the sitemap, and JSON-LD derives from it. A plain
+  constant rather than an env var on purpose: preview deploys must not emit
+  canonicals pointing at their own hostname and compete with production.
+
+- **`src/app/robots.ts`** → `/robots.txt`. Allows everything except `/api/`
+  (the quote-form POST handler, nothing crawlable), declares `Host`, and points
+  at the sitemap.
+
+- **`src/app/sitemap.ts`** → `/sitemap.xml`. Static routes with tuned
+  priorities; case-study URLs are derived from `uiuxProjects` — the same array
+  that drives `generateStaticParams` — so uncommenting a project adds its case
+  study automatically. `lastModified` is captured once per build, not per
+  request, so URLs don't look freshly edited on every fetch.
+
+- **`src/app/opengraph-image.tsx`** — 1200×630 PNG generated at build time via
+  `ImageResponse`, so there is no binary asset to keep in sync with the wording.
+  Links shared to WhatsApp/LinkedIn/X previously rendered blank.
+
+- **Per-route metadata** — unique title, description, and canonical for `/`,
+  `/about`, `/projects`, `/contact`, and each case study. `/about` and
+  `/projects` carry theirs in a new thin server `layout.tsx`, because both pages
+  are `'use client'` and a client component cannot export `metadata`.
+
+- **`generateMetadata` for `/case/[slug]`** — title, description, `keywords`
+  from the project's tags, canonical, and OG/Twitter images from
+  `project.image`. An unknown slug returns `robots: { index: false }` so the 404
+  isn't indexed under the site-wide title.
+
+- **`Person` JSON-LD** in the root layout, tying the site and the person into
+  one entity for name searches. `sameAs` currently lists only GitHub — add
+  LinkedIn and any other profiles as they exist.
+
+- **`FAQPage` JSON-LD** on `/contact`, built from the same `faqs` array the
+  `FAQ` component renders, so the markup can never describe answers that aren't
+  on the page.
+
+- **`docs/seo.md`** documenting all of the above.
+
+### Changed
+
+- **Root `metadata` gained `metadataBase`** (`src/app/layout.tsx`), required
+  before any relative URL can be used in a URL-based metadata field. The
+  site-wide title also became `Shaul Akelo — Web, 3D & Animation Developer`,
+  and `description` now reads as prose rather than the placeholder
+  "I make website and 3d environments and animations."
+
+### Fixed
+
+- **Google Search Console verification file was unreachable.**
+  `googleedcc4cbe49e1037a.html` sat in the repo root, where Next does not route
+  it — the URL returned 404 and verification would have failed silently. Moved
+  to `public/googleedcc4cbe49e1037a.html`.
+
+- **Every page reported the same title and description.** All routes inherited
+  `title: "Shaul Akelo"` from the root layout, so Google saw four pages of
+  duplicate metadata and wrote its own snippets. The `title.template` defined at
+  `layout.tsx:33` was also unused, since no page set a title for it to wrap.
+
 ## [Unreleased] — 2026-07-29
 
 Gave every button a hover animation, and connected the last of the dead links.
