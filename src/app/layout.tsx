@@ -84,7 +84,10 @@ const personSchema = {
     "Three.js",
     "Next.js",
   ],
-  sameAs: ["https://github.com/Akelo-Shaul"],
+  sameAs: [
+    "https://github.com/Akelo-Shaul",
+    "https://www.linkedin.com/in/shaul-akelo",
+  ],
 };
 
 export default function RootLayout({

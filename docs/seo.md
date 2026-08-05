@@ -74,8 +74,12 @@ competing page listings — it tells Google the site and the person are one
 entity.
 
 `sameAs` is the array that links off-site profiles to this domain, and is the
-strongest signal in the block. It currently holds only the GitHub profile;
-**add LinkedIn, Behance, Dribbble, and any other profile as they exist.**
+strongest signal in the block. It currently holds GitHub and LinkedIn; **add
+Behance, Dribbble, and any other profile as they exist.**
+
+The signal only works if it round-trips: each profile listed here should also
+link back to `shaulakelo.com`. A `sameAs` entry pointing at a profile that never
+mentions the domain is a claim Google cannot corroborate.
 
 ## Per-route metadata
 
