@@ -2,7 +2,8 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 import { useLoader } from './LoaderContext'
-import { useContext, useEffect, useState } from 'react'
+import { useLenis } from 'lenis/react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 // Freezes the App Router context so an exiting page keeps rendering its own content during the
@@ -24,11 +25,41 @@ function FrozenRouter({ children }: { children: React.ReactNode }) {
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const { introDone, setTransitioning } = useLoader()
+  const lenis = useLenis()
   const [animating, setAnimating] = useState(true)
   const [prevPath, setPrevPath] = useState(pathname)
 
   // Mirror the animating state to the shared context so the footer can hide during a transition.
   useEffect(() => { setTransitioning(animating) }, [animating, setTransitioning])
+
+  // Reset scroll ourselves on route change, because Next's built-in scroll-to-top bails out here.
+  // Its handler skips the scroll when the incoming page's top edge is already in the viewport —
+  // and the fixed overlay below puts that edge at y=0 no matter where the document is scrolled,
+  // so the check always passes. Without this, navigating from the bottom of a page (i.e. from the
+  // bottom nav, which auto-opens down there) lands the next page at the footer.
+  // Lenis owns the scroll, so go through it — writing scrollTop directly gets overwritten on its
+  // next RAF tick.
+  const scrolledFor = useRef(pathname)
+  useEffect(() => {
+    // Skips the initial mount, and the re-run once `lenis` becomes available, so a refresh that
+    // restores scroll position isn't yanked to the top.
+    if (scrolledFor.current === pathname) return
+    scrolledFor.current = pathname
+    // `immediate`: no visible jump — this happens behind the transition, while both page layers
+    // are position:fixed and the footer is `invisible`.
+    // `force`: bypasses Lenis's stopped state, since BottomNav/QuoteDrawer call lenis.stop().
+    if (lenis) lenis.scrollTo(0, { immediate: true, force: true })
+    else window.scrollTo(0, 0)
+  }, [pathname, lenis])
+
+  // Once the wrapper leaves position:fixed the document regains its full height, so Lenis has to
+  // re-measure — otherwise it keeps the short (fixed) `limit`, which feeds BottomNav's
+  // at-the-bottom detection and would pop the menu open on arrival. This has to be an effect
+  // rather than part of onAnimationComplete: the flip to `relative` isn't in the DOM until React
+  // has committed `animating`.
+  useEffect(() => {
+    if (!animating) lenis?.resize()
+  }, [animating, lenis])
 
   // On route change, re-enter the fixed-overlay "animating" state BEFORE paint so the
   // incoming page reveals over the outgoing one instead of flashing in normal flow first.
