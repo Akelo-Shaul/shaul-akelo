@@ -77,9 +77,14 @@ shared by the whole site. See `docs/seo.md` for the full architecture.
   content. The case-study backdrop is decorative and now carries `alt=""` so
   screen readers skip it rather than announcing "case study background".
 
-- **`sameAs` now lists Instagram and YouTube** alongside GitHub and LinkedIn,
-  matching the footer's social links. A profile linked in the footer but absent
-  from the schema is a wasted entity signal.
+- **`sameAs` now lists Instagram, YouTube, and X** alongside GitHub and
+  LinkedIn, matching the footer's social links. A profile linked in the footer
+  but absent from the schema is a wasted entity signal.
+
+- **The footer's X link now points at the real profile** rather than `#`. The
+  surrounding markup already applied `target="_blank"` and
+  `rel="noopener noreferrer"` to any social with a non-empty href, so it picked
+  those up automatically.
 
 - **Project cards now link to the case page rather than straight out to the
   Play Store / live site** (`getProjectHref`). Without an inbound internal link

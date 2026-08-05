@@ -91,6 +91,7 @@ const personSchema = {
     "https://www.linkedin.com/in/shaul-akelo/",
     "https://www.instagram.com/official_shaul_/",
     "https://www.youtube.com/@shaulakelo",
+    "https://x.com/AkeloShaul21681",
   ],
 };
 

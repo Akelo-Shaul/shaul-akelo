@@ -9,7 +9,7 @@ const socials = [
   { label: "Instagram", href: "https://www.instagram.com/official_shaul_/" },
   { label: "YouTube",   href: "https://www.youtube.com/@shaulakelo" },
   { label: "LinkedIn",  href: "https://www.linkedin.com/in/shaul-akelo/" },
-  { label: "X",         href: "" },
+  { label: "X",         href: "https://x.com/AkeloShaul21681" },
 ]
 
 const legal = [

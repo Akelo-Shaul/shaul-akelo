@@ -221,10 +221,10 @@ name, and no link reads "click here" or "read more".
 
 ### Known gaps
 
-- The footer's **X link, Privacy policy, and Terms & conditions point at `#`**.
+- The footer's **Privacy policy and Terms & conditions still point at `#`**.
   Dead placeholders — either give them real destinations or remove them.
 - `sameAs` in the `Person` schema must stay in step with the footer's social
-  links. Both currently list GitHub, LinkedIn, Instagram, and YouTube.
+  links. Both currently list GitHub, LinkedIn, Instagram, YouTube, and X.
 
 ## What this does not do
 
