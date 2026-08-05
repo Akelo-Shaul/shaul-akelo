@@ -100,13 +100,35 @@ so its metadata sits directly in `page.tsx`.
 
 ### Case studies (`case/[slug]/page.tsx`)
 
-`generateMetadata` builds everything from the project record in
-`src/data/projects.ts`: title, description, `keywords` from `tags`, canonical,
-and OG/Twitter images from `project.image` (falling back to the app-level OG
-image when a project has no artwork).
+**Every project gets a case page**, across all three categories — not just
+UI/UX. The route, the sitemap, and `getProjectHref` all read from one exported
+array, `caseStudyProjects` in `src/data/projects.ts`, so they cannot disagree
+about which pages exist.
+
+This exists because of how `/projects` renders. That page shows one tab at a
+time from client state, so **only the default "software" tab appears in the
+server-rendered HTML** — `Room` and `Pizza App` were in no crawlable markup
+anywhere on the site. A dedicated route per project sidesteps the tabs.
+
+`getProjectHref` therefore prefers the internal case page over the project's
+external link (Play Store, live site, repo). Without an inbound internal link a
+page is orphaned, and a sitemap entry alone is a weak discovery signal. The
+outbound link still appears on the case page itself, via `getProjectLink`.
+
+`generateMetadata` builds everything from the project record: title (derived
+from `category`, so each page reads as "MazeMob Software Case Study" rather
+than every page claiming to be UI/UX), description, `keywords` from `tags`,
+canonical, and OG/Twitter images from `project.image` (falling back to the
+app-level OG image when a project has no artwork).
 
 An unknown slug returns `robots: { index: false, follow: false }` so the 404
 does not get indexed under the site-wide title.
+
+> **These pages are only as good as `sections`.** A project without a `sections`
+> array renders the hero alone — name, description, and a link, ~60 words. That
+> is indexable but far too thin to rank. `pizza-app` has sections and renders
+> ~280 words; `mazemob` and `room` do not. Writing `sections` for them is the
+> highest-value SEO work left on the site.
 
 ### FAQ structured data
 
@@ -125,10 +147,11 @@ and has nothing crawlable. Declares `Host` and points at the sitemap.
 Static routes are listed explicitly with hand-tuned priorities (home `1.0`,
 projects `0.9`, case studies `0.8`, about/contact `0.7`).
 
-Case-study URLs are **derived from `uiuxProjects`** — the same array that drives
-`generateStaticParams` — so uncommenting a project in `src/data/projects.ts`
-adds its case study to the sitemap automatically. Only `pizza-app` is currently
-active; the other project entries are commented out in the data file.
+Case-study URLs are **derived from `caseStudyProjects`** — the same array that
+drives `generateStaticParams` — so uncommenting a project in
+`src/data/projects.ts` adds its case study to the sitemap automatically.
+`mazemob`, `pizza-app`, and `room` are currently live; the remaining project
+entries are commented out in the data file.
 
 `lastModified` is a single timestamp captured once per build, not a per-request
 `new Date()`. A timestamp that changes on every fetch makes every URL look
@@ -168,14 +191,52 @@ payload embedded in the page.
 Technical SEO makes the site **eligible** to rank; it does not rank it. The
 remaining work is off-page and editorial:
 
-- **Written content.** Case studies need substantive indexable prose. Text baked
-  into images is invisible to Google. One live case study (`pizza-app`) is thin
-  ground to rank on — the commented-out projects are the biggest available win.
+- **Written content — the binding constraint.** Measured from the prerendered
+  HTML (see below):
+
+  | Page | Rendered words |
+  | --- | --- |
+  | `/contact` | 378 |
+  | `/case/pizza-app` | 280 |
+  | `/about` | 217 |
+  | `/` | 198 |
+  | `/projects` | 85 |
+  | `/case/mazemob` | 62 |
+  | `/case/room` | 60 |
+
+  Under roughly 300 words there is little for Google to match a query against.
+  Adding `sections` to `mazemob` and `room` is the single highest-value change
+  available, and no amount of metadata substitutes for it. Text baked into
+  images is invisible to Google.
+
 - **Backlinks.** Get the domain onto the GitHub profile, LinkedIn, and any
   directory listing. These also reinforce the `sameAs` entity signal above.
-- **Client-side rendering.** Most pages are `'use client'` with a
-  `PageTransition` wrapper. Google does render JavaScript, but server-rendered
-  text is strictly safer — worth confirming with Search Console's URL Inspection
-  tool ("view crawled page") that body copy appears in the crawled HTML.
-- **Search Console.** Submit `https://shaulakelo.com/sitemap.xml` after
-  verification completes.
+
+- **Search Console.** Submit `https://shaulakelo.com/sitemap.xml`.
+
+### Client-side rendering is *not* a problem here
+
+Most pages are `'use client'`, which looks like an indexing risk but is not:
+Next server-renders client components on the initial request, so the body copy
+is in the HTML and Googlebot needs no JavaScript to read it. This was verified
+against the prerendered output, not assumed.
+
+The one real exception is the `/projects` tab state, which is why every project
+has its own route — see *Case studies* above.
+
+To re-check after a refactor, count words in the rendered markup:
+
+```bash
+npm run build
+node -e '
+const fs=require("fs");
+let h=fs.readFileSync(".next/server/app/about.html","utf8");
+h=h.replace(/<script[\s\S]*?<\/script>/g,"").replace(/<style[\s\S]*?<\/style>/g,"");
+const t=h.replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();
+console.log(t.split(/\s+/).length, "words");
+console.log(t.slice(0,300));'
+```
+
+Strip `<script>` blocks **non-greedily**, as above. A greedy `sed` deletes
+everything between the first and last script tag — which is most of the page —
+and makes fully-rendered pages look empty.

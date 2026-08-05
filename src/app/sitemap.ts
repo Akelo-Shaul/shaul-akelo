@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { uiuxProjects } from '@/data/projects'
+import { caseStudyProjects } from '@/data/projects'
 import { SITE_URL } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Derived from the same array that drives `generateStaticParams` in case/[slug]/page.tsx, so
   // commenting a project back in adds its case study here automatically.
-  const caseRoutes: MetadataRoute.Sitemap = uiuxProjects.map((project) => ({
+  const caseRoutes: MetadataRoute.Sitemap = caseStudyProjects.map((project) => ({
     url: `${SITE_URL}/case/${project.slug}`,
     lastModified,
     changeFrequency: 'yearly',

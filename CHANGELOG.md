@@ -48,9 +48,26 @@ shared by the whole site. See `docs/seo.md` for the full architecture.
   `FAQ` component renders, so the markup can never describe answers that aren't
   on the page.
 
+- **A case-study page for every project, not just UI/UX** — `/case/mazemob` and
+  `/case/room` join `/case/pizza-app`. The route, sitemap, and `getProjectHref`
+  all read from one new `caseStudyProjects` export so they cannot disagree about
+  which pages exist.
+
+  The `/projects` page renders one tab at a time from client state, so only the
+  default "software" tab reaches the server-rendered HTML — `Room` and
+  `Pizza App` appeared in no crawlable markup anywhere on the site. A dedicated
+  route per project sidesteps the tabs. Case-study titles are now derived from
+  `category`, so each page reads as "MazeMob Software Case Study" rather than
+  every page claiming to be a UI/UX one.
+
 - **`docs/seo.md`** documenting all of the above.
 
 ### Changed
+
+- **Project cards now link to the case page rather than straight out to the
+  Play Store / live site** (`getProjectHref`). Without an inbound internal link
+  a case page is orphaned, and a sitemap entry alone is a weak discovery signal.
+  The outbound link still appears on the case page itself.
 
 - **Root `metadata` gained `metadataBase`** (`src/app/layout.tsx`), required
   before any relative URL can be used in a URL-based metadata field. The

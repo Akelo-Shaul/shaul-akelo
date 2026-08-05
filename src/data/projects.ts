@@ -158,14 +158,33 @@ export const projects: Project[] = [
 ]
 
 /**
+ * Every project that gets its own `/case/[slug]` page — currently all of them, across all three
+ * categories.
+ *
+ * This is the only way the software and 3D work reaches Google. The /projects page renders one
+ * tab at a time from client state, so anything outside the default ("software") tab never appears
+ * in the server-rendered HTML: Room and Pizza App were invisible to crawlers on that page. A
+ * dedicated route per project sidesteps the tabs entirely.
+ *
+ * Deliberately a named alias of `projects` so the route, the sitemap, and `getProjectHref` can
+ * never disagree about which case pages exist.
+ */
+export const caseStudyProjects: Project[] = projects
+
+/**
  * Where a project row/card should navigate to, in order of preference:
- *   1. its case-study page, if one exists — only UI/UX projects get `/case/[slug]` routes
+ *   1. its case-study page — every project in `caseStudyProjects` has one
  *      (see `generateStaticParams` in src/app/case/[slug]/page.tsx)
  *   2. otherwise the live project itself — Play Store, site, or repo — in a new tab
  *   3. otherwise the projects index, so the link is never dead
+ *
+ * Preferring the internal case page over the external link is intentional: it keeps the crawl on
+ * the site and gives each case page an inbound internal link, without which the page is orphaned
+ * and a sitemap entry alone is a weak discovery signal. The outbound Play Store / site / repo link
+ * still appears on the case page itself, via `getProjectLink`.
  */
 export function getProjectHref(project: Project): { href: string; external: boolean } {
-    if (uiuxProjects.some((p) => p.slug === project.slug)) {
+    if (caseStudyProjects.some((p) => p.slug === project.slug)) {
         return { href: `/case/${project.slug}`, external: false }
     }
 
