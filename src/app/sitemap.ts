@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { caseStudyProjects } from '@/data/projects'
+import { services } from '@/data/services'
 import { SITE_URL } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -10,10 +11,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified, changeFrequency: 'monthly', priority: 1 },
+    { url: `${SITE_URL}/services`, lastModified, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${SITE_URL}/projects`, lastModified, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${SITE_URL}/about`, lastModified, changeFrequency: 'yearly', priority: 0.7 },
     { url: `${SITE_URL}/contact`, lastModified, changeFrequency: 'yearly', priority: 0.7 },
   ]
+
+  // The commercial landing pages — these are what a hiring query should reach, as opposed to the
+  // case studies, which rank for the projects themselves.
+  const serviceRoutes: MetadataRoute.Sitemap = services.map((service) => ({
+    url: `${SITE_URL}/services/${service.slug}`,
+    lastModified,
+    changeFrequency: 'monthly',
+    priority: 0.9,
+  }))
 
   // Derived from the same array that drives `generateStaticParams` in case/[slug]/page.tsx, so
   // commenting a project back in adds its case study here automatically.
@@ -24,5 +35,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  return [...staticRoutes, ...caseRoutes]
+  return [...staticRoutes, ...serviceRoutes, ...caseRoutes]
 }

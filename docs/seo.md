@@ -14,12 +14,36 @@ src/lib/site.ts               ← single source of truth for the domain
 ├── src/app/robots.ts         → /robots.txt
 ├── src/app/sitemap.ts        → /sitemap.xml
 ├── src/app/opengraph-image.tsx → /opengraph-image  (1200×630 PNG)
-└── src/app/layout.tsx        → site-wide defaults + Person JSON-LD
-    ├── about/layout.tsx      → /about metadata
-    ├── projects/layout.tsx   → /projects metadata
-    ├── contact/page.tsx      → /contact metadata + FAQPage JSON-LD
-    └── case/[slug]/page.tsx  → per-project metadata (generateMetadata)
+└── src/app/layout.tsx        → site-wide defaults + @graph JSON-LD
+    ├── about/layout.tsx        → /about metadata
+    ├── projects/layout.tsx     → /projects metadata
+    ├── contact/page.tsx        → /contact metadata + FAQPage JSON-LD
+    ├── services/page.tsx       → /services metadata + ItemList JSON-LD
+    ├── services/[slug]/page.tsx → per-service metadata + Service JSON-LD
+    └── case/[slug]/page.tsx    → per-project metadata (generateMetadata)
 ```
+
+## Two audiences, two page types
+
+The site targets two different searches, and they need different pages:
+
+| Query type | Example | Lands on |
+| --- | --- | --- |
+| **Personal brand / entity** | "Shaul Akelo" | `/`, `/about`, the `@graph` schema |
+| **Hiring intent** | "3d animation for brands" | `/services/*` |
+| **Project interest** | "pizza app case study" | `/case/*` |
+
+Case studies rank for the *work*; service pages rank for *wanting the work done*.
+Different people at different stages, which is why both exist. Service copy lives
+in `src/data/services.ts` and is drafted from claims the site already makes
+elsewhere — it is marketing copy and should be edited to sound right.
+
+**Geography: none, by choice.** `areaServed` is `Worldwide` and no service page
+targets a city or country. This is a deliberate decision to compete on service
+terms globally rather than on local ones. It is the harder path — established
+agencies hold those terms — so expect a long horizon. If that trade ever gets
+revisited, local targeting means: a real address in `/contact`, city and country
+in indexable text, `areaServed` narrowed, and locality in service page titles.
 
 ## The canonical origin
 
@@ -66,12 +90,26 @@ its own. **Every route currently overrides it.** If you add a route, it must set
 its own canonical or it will declare itself a duplicate of the home page and
 drop out of the index.
 
-### `Person` JSON-LD
+### The JSON-LD `@graph`
 
-The root layout injects a `Person` schema on every page. This is what earns a
-search for *"Shaul Akelo"* a single consolidated result instead of four
-competing page listings — it tells Google the site and the person are one
-entity.
+The root layout injects three linked nodes on every page:
+
+| Node | `@id` | Role |
+| --- | --- | --- |
+| `Person` | `/#person` | Shaul Akelo, the individual |
+| `Organization` | `/#organization` | Shaul Akelo, the studio |
+| `WebSite` | `/#website` | the site, `publisher` → organisation |
+
+The studio and the person **share a name**, so they are modelled as two linked
+nodes rather than one merged blob: the `Organization` sells the services, and
+`founder` points at the `Person`. Stable `@id`s are what make this work — the
+`Service` schema on each `/services/[slug]` sets `provider` to
+`/#organization`, so Google resolves one entity offering three services rather
+than several unrelated things.
+
+Both nodes carry the same `sameAs` profiles deliberately: the profiles represent
+both. This is what earns a search for *"Shaul Akelo"* a single consolidated
+result instead of competing page listings.
 
 `sameAs` is the array that links off-site profiles to this domain, and is the
 strongest signal in the block. It currently holds GitHub and LinkedIn; **add
@@ -219,6 +257,36 @@ so screen readers skip it.
 **Anchor text** is descriptive throughout — project cards link on the project's
 name, and no link reads "click here" or "read more".
 
+### Internal linking
+
+`navLinks` feeds the BottomNav menu, which is **closed by default** — so none of
+its links appear in the server-rendered HTML. Before the footer nav existed, the
+only crawlable internal links were the ones embedded in hero and CTA buttons,
+and `/services` was reachable from the sitemap alone.
+
+The footer therefore renders `navLinks` as a plain `<nav>`. That row is the
+site's only complete server-rendered navigation — **do not remove it** without
+replacing the links elsewhere.
+
+Every page is reachable from `/` by links alone. To re-verify after adding a
+route, walk the built HTML:
+
+```bash
+node -e '
+const fs=require("fs");
+const seen=new Set(), queue=["/"];
+const fileFor=p=>p==="/"?".next/server/app/index.html":`.next/server/app${p}.html`;
+while(queue.length){
+  const p=queue.shift(); if(seen.has(p))continue; seen.add(p);
+  let h; try{h=fs.readFileSync(fileFor(p),"utf8")}catch{continue}
+  for(const m of h.matchAll(/href="(\/[a-z0-9\/-]*)"/g)) if(!seen.has(m[1])) queue.push(m[1]);
+}
+console.log([...seen].sort().join("\n"));'
+```
+
+The output should match the sitemap. Anything in the sitemap but missing here is
+orphaned.
+
 ### Known gaps
 
 - The footer's **Privacy policy and Terms & conditions still point at `#`**.
@@ -238,8 +306,12 @@ remaining work is off-page and editorial:
   | --- | --- |
   | `/contact` | 378 |
   | `/case/pizza-app` | 280 |
+  | `/services/web-development` | 271 |
+  | `/services/3d-animation` | 259 |
+  | `/services/ui-ux-design` | 240 |
   | `/about` | 217 |
   | `/` | 198 |
+  | `/services` | 157 |
   | `/projects` | 85 |
   | `/case/mazemob` | 62 |
   | `/case/room` | 60 |

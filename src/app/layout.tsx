@@ -64,34 +64,68 @@ export const metadata: Metadata = {
   },
 };
 
-// Tells Google that the site and the person are one entity, which is what earns a name search
-// ("Shaul Akelo") the consolidated result rather than four competing page listings. `sameAs` is the
-// signal that ties the off-site profiles to this domain — add any further profiles to that array.
-const personSchema = {
+// Kept in sync with the social links in Footer.tsx — a profile linked in the footer but missing
+// here is a wasted entity signal.
+const PROFILES = [
+  "https://github.com/Akelo-Shaul",
+  "https://www.linkedin.com/in/shaul-akelo/",
+  "https://www.instagram.com/official_shaul_/",
+  "https://www.youtube.com/@shaulakelo",
+  "https://x.com/AkeloShaul21681",
+];
+
+/**
+ * The studio and the person share a name, so they are modelled as two linked nodes rather than one
+ * merged blob: an Organization that sells the services, and the Person who founded it. Each has a
+ * stable `@id` so the Service schema on /services/[slug] can point `provider` at the organisation,
+ * and so Google resolves "Shaul Akelo the studio" and "Shaul Akelo the person" to one entity
+ * instead of two competing ones.
+ *
+ * Both carry the same `sameAs` profiles deliberately — the profiles represent both.
+ */
+const graphSchema = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Shaul Akelo",
-  url: SITE_URL,
-  image: `${SITE_URL}/about.webp`,
-  email: "mailto:shaulakelo@gmail.com",
-  jobTitle: "Web, 3D & Animation Developer",
-  description: SITE_DESCRIPTION,
-  knowsAbout: [
-    "Web Development",
-    "3D Environments",
-    "Animation",
-    "UI/UX Design",
-    "Three.js",
-    "Next.js",
-  ],
-  // Kept in sync with the social links in Footer.tsx — a profile linked in the footer but missing
-  // here is a wasted entity signal.
-  sameAs: [
-    "https://github.com/Akelo-Shaul",
-    "https://www.linkedin.com/in/shaul-akelo/",
-    "https://www.instagram.com/official_shaul_/",
-    "https://www.youtube.com/@shaulakelo",
-    "https://x.com/AkeloShaul21681",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: "Shaul Akelo",
+      url: SITE_URL,
+      image: `${SITE_URL}/about.webp`,
+      email: "mailto:shaulakelo@gmail.com",
+      jobTitle: "Web, 3D & Animation Developer",
+      description: SITE_DESCRIPTION,
+      knowsAbout: [
+        "Web Development",
+        "3D Environments",
+        "Animation",
+        "UI/UX Design",
+        "Three.js",
+        "Next.js",
+      ],
+      sameAs: PROFILES,
+    },
+    {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/opengraph-image`,
+      email: "mailto:shaulakelo@gmail.com",
+      telephone: "+254115089122",
+      description: SITE_DESCRIPTION,
+      founder: { "@id": `${SITE_URL}/#person` },
+      // Global by choice — the studio works remotely rather than targeting a local market.
+      areaServed: "Worldwide",
+      sameAs: PROFILES,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
   ],
 };
 
@@ -110,7 +144,7 @@ export default function RootLayout({
           type="application/ld+json"
           // Structured data has to reach the HTML as a raw JSON string. The content is a local
           // constant with no user input, so there is nothing here to escape against.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(graphSchema) }}
         />
         <AnimatedFavicon />
         <LoaderProvider>

@@ -2,7 +2,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { getFooterImage } from "@/data/navigation"
+import { getFooterImage, navLinks } from "@/data/navigation"
 import { useLoader } from "./LoaderContext"
 
 const socials = [
@@ -52,6 +52,25 @@ export default function Footer() {
           Shaul Akelo
         </p>
       </div>
+
+      {/* Page links. These are the site's only server-rendered internal navigation: navLinks
+          otherwise feeds the BottomNav menu, which is closed by default and so contributes no
+          crawlable links. Without this row /services would be reachable only from the sitemap,
+          which is a weak discovery signal on its own. */}
+      <nav aria-label="Footer" className="relative z-10 w-full px-5 md:px-8 pb-4">
+        <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs uppercase tracking-widest">
+          {navLinks.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="opacity-70 transition-opacity hover:opacity-100"
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       {/* Bottom row: copyright · socials · legal */}
       <div className="relative z-10 w-full px-5 md:px-8 pb-6">

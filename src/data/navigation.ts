@@ -1,6 +1,7 @@
 export const navLinks = [
     { label: 'Home',     href: '/' },
     { label: 'About',    href: '/about' },
+    { label: 'Services', href: '/services' },
     { label: 'Projects', href: '/projects' },
     { label: 'Contact',  href: '/contact' },
 ]
@@ -8,6 +9,7 @@ export const navLinks = [
 const footerImages: Record<string, string> = {
     '/':         '/tech.webp',
     '/about':    '/poi.webp',
+    '/services': '/tech.webp', // placeholder — swap later
     '/projects': '/Frozen.webp',
     '/contact':  '/tech.webp', // placeholder — swap later
 }

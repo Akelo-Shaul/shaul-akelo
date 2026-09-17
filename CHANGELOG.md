@@ -3,6 +3,44 @@
 All notable changes to this project are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased] — 2026-08-06
+
+Added the commercial half of the SEO surface. The site could rank for the work
+but had nothing for someone searching to *hire* — no service pages existed.
+
+### Added
+
+- **`/services` and three service pages** (`src/data/services.ts`,
+  `src/app/services/`). Web & Software Development, UI/UX Design, and 3D
+  Environments & Animation, each with what's included, how the work runs, who
+  it's for, and links to the case studies that demonstrate it.
+
+  Case studies rank for the *work* ("pizza app case study"); service pages rank
+  for *wanting the work done* ("3d animation for brands"). Different queries
+  from different people, hence both. The copy is drafted from claims the site
+  already makes in the manifesto, FAQs, and project descriptions — it is
+  marketing copy and should be edited to sound right.
+
+- **`Service` JSON-LD per service page**, plus `ItemList` on the index. Each
+  sets `provider` to the organisation's `@id`, so the three read as one entity's
+  offerings rather than unrelated things.
+
+- **A footer nav listing every page.** `navLinks` only fed the BottomNav menu,
+  which is closed by default and so contributed *no* server-rendered links —
+  `/services` would have been reachable from the sitemap alone. Every page is
+  now reachable from `/` by links alone.
+
+### Changed
+
+- **`Person` JSON-LD became an `@graph` of `Person` + `Organization` +
+  `WebSite`** (`src/app/layout.tsx`). The studio and the person share a name, so
+  they are modelled as two linked nodes — the organisation sells the services,
+  `founder` points at the person, and stable `@id`s let the `Service` schema
+  reference the organisation as `provider`. `areaServed` is `Worldwide`: a
+  deliberate choice to compete on service terms globally rather than locally.
+
+- **`Services` added to `navLinks`**, between About and Projects.
+
 ## [Unreleased] — 2026-08-05
 
 Built out the SEO surface, which was previously a single title and description
