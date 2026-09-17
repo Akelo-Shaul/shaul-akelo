@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   // `default` is the tab title for any page that doesn't set its own; `template` wraps ones
   // that do, so a future `title: 'About'` renders as "About — Shaul Akelo".
   title: {
-    default: "Shaul Akelo — Web, 3D & Animation Developer",
+    default: "Shaul Akelo — Software Developer, Animator & UI/UX Designer",
     template: "%s — Shaul Akelo",
   },
   description: SITE_DESCRIPTION,
@@ -46,12 +46,12 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "en_US",
     url: "/",
-    title: "Shaul Akelo — Web, 3D & Animation Developer",
+    title: "Shaul Akelo — Software Developer, Animator & UI/UX Designer",
     description: SITE_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Shaul Akelo — Web, 3D & Animation Developer",
+    title: "Shaul Akelo — Software Developer, Animator & UI/UX Designer",
     description: SITE_DESCRIPTION,
   },
   // Declared here rather than as app/icon.gif — Next's icon file convention only accepts
@@ -93,7 +93,7 @@ const graphSchema = {
       url: SITE_URL,
       image: `${SITE_URL}/about.webp`,
       email: "mailto:shaulakelo@gmail.com",
-      jobTitle: "Web, 3D & Animation Developer",
+      jobTitle: "Software Developer, Animator & UI/UX Designer",
       description: SITE_DESCRIPTION,
       knowsAbout: [
         "Web Development",
